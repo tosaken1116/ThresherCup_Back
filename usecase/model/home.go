@@ -14,11 +14,11 @@ type Home struct {
 }
 
 func HomeFromDomainModel(m *model.Home)*Home{
-	u := &Home{
+	h := &Home{
 		UserID : m.UserID,
 		Longitude: m.Longitude,
 		Latitude: m.Latitude,
 		NonPassRange: m.NonPassRange,
 	}
-	return u
+	return h
 }

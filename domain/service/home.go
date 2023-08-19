@@ -8,8 +8,8 @@ type homeService struct {
 	repo repository.IHomeRepository
 }
 
-func NewHomeService(ur repository.IHomeRepository) IHomeService{
+func NewHomeService(hr repository.IHomeRepository) IHomeService{
 	return &homeService{
-		repo:ur,
+		repo:hr,
 	}
 }
