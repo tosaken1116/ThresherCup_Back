@@ -3,7 +3,7 @@ package infra
 import (
 	"fmt"
 	"log"
-	"thresher/utils"
+	"thresher/utils/config"
 
 	"gorm.io/driver/postgres"
 
@@ -15,7 +15,7 @@ type DbConnector struct {
 }
 
 func NewPostgresConnector() *DbConnector {
-	conf := utils.LoadConfig()
+	conf := config.LoadConfig()
 	dsn := dbConnInfo(*conf)
 	Psql, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
@@ -26,7 +26,7 @@ func NewPostgresConnector() *DbConnector {
 		Conn: Psql,
 	}
 }
-func dbConnInfo(con utils.AppCon) string {
+func dbConnInfo(con config.AppCon) string {
 	databaseSourceName := fmt.Sprintf(
 		"host=%s user=%s password=%s dbname=%s port=%s",
 		con.Db.DbHost,
