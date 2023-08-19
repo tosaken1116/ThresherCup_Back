@@ -45,7 +45,7 @@ type Location struct {
 	Longitude string    `json:"longitude"`
 	Latitude  string    `json:"latitude"`
 	CreatedAt time.Time `json:"created_at"`
-	UserId    uuid.UUID `json:"user_id"`
+	UserID    uuid.UUID `json:"user_id"`
 
 	User Users `json:"user"`
 }
