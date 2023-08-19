@@ -21,6 +21,7 @@ func InitRouter() *gin.Engine {
 			InitHomeRouter(v1)
 			InitPostRouter(v1)
 			InitLocationRouter(v1)
+			InitEncounterRouter(v1)
 		}
 	}
 	return r
