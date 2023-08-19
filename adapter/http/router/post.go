@@ -18,5 +18,6 @@ func InitPostRouter(r *gin.RouterGroup){
 				"status": "OK",
 			})
 		})
+		postGroup.GET("/:id")
 	}
 }
