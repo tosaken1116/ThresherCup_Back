@@ -2,15 +2,21 @@ package router
 
 import (
 	"net/http"
+	"thresher/adapter/http/controller"
+	"thresher/domain/repository"
+	"thresher/domain/service"
+	"thresher/infra"
+	"thresher/usecase"
 
 	"github.com/gin-gonic/gin"
 )
 
 func InitPostRouter(r *gin.RouterGroup){
-	// db := infra.NewPostgresConnector()
-	// postRepository := repository.NewPostRepository(db.Conn)
-	// postService := service.NewPostService(postRepository)
-	// postUsecase := usecase.NewPostUsecase(postService)
+	db := infra.NewPostgresConnector()
+	postRepository := repository.NewPostRepository(db.Conn)
+	postService := service.NewPostService(postRepository)
+	postUsecase := usecase.NewPostUsecase(postService)
+	postController := controller.NewPostController(postUsecase)
 	postGroup := r.Group("/posts")
 	{
 		postGroup.GET("/health", func(c *gin.Context) {
@@ -18,6 +24,6 @@ func InitPostRouter(r *gin.RouterGroup){
 				"status": "OK",
 			})
 		})
-		postGroup.GET("/:id")
+		postGroup.GET("/:id",func(c *gin.Context) {postController.GetPostById(c)})
 	}
 }

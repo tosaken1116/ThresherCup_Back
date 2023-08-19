@@ -28,7 +28,8 @@ type Posts struct {
 	DeletedAt   time.Time `json:"deleted_at"`
 	UserID      uuid.UUID `json:"user_id"`
 
-	User Users `json:"user"`
+	User  Users   `json:"user"`
+	Liked []Users `json:"liked" gorm:"many2many:likes"`
 }
 
 type Home struct {

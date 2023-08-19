@@ -1,4 +1,77 @@
+basePath: /api/v1
+definitions:
+  errors.ErrorResponse:
+    properties:
+      detail:
+        type: string
+      status_text:
+        type: string
+    type: object
+  model.Post:
+    properties:
+      created_at:
+        type: string
+      description:
+        type: string
+      id:
+        type: string
+      liked_num:
+        type: integer
+      user:
+        $ref: '#/definitions/thresher_usecase_model.Users'
+    type: object
+  thresher_usecase_model.Users:
+    properties:
+      email:
+        type: string
+      id:
+        type: string
+      image_url:
+        type: string
+      name:
+        type: string
+    type: object
 info:
   contact: {}
-paths: {}
+  description: This is Thresher hackathon backend.
+  license:
+    name: Tosaken
+  title: Thresher
+  version: "1.0"
+paths:
+  /posts/{id}:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Post'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errors.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/errors.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errors.ErrorResponse'
+      summary: 投稿の取得
+      tags:
+      - post
+securityDefinitions:
+  BearerAuth:
+    type: basic
 swagger: "2.0"
