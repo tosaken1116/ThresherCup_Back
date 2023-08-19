@@ -9,7 +9,7 @@ import (
 type Users struct {
 	ID        uuid.UUID `json:"id" gorm:"primary_key"`
 	Name      string    `json:"name"`
-	IconPath  string    `json:"icon_path"`
+	ImageUrl  string    `json:"image_url"`
 	Email     string    `json:"email" gorm:"unique"`
 	CreatedAt time.Time `json:"created_at"`
 	DeletedAt time.Time `json:"deleted_at"`
