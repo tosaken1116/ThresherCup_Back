@@ -1,4 +1,4 @@
-package http
+package router
 
 import (
 	"net/http"
@@ -19,7 +19,7 @@ func InitRouter() *gin.Engine {
 					"status": "OK",
 				})
 			})
-
+			InitUserRouter(v1)
 		}
 	}
 	return r
