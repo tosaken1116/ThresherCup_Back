@@ -15,9 +15,9 @@ type Users struct {
 	DeletedAt time.Time `json:"deleted_at"`
 
 	Likes       []Posts   `json:"likes" gorm:"many2many:likes"`
-	Following   []Users   `json:"following" gorm:"many2many:following foreignKey:ID;association_foreignKey:ID;joinForeignKey:followed_id;JoinReferences:following_id"`
-	Followed    []Users   `json:"followed" gorm:"many2many:following foreignKey:ID;association_foreignKey:ID;joinForeignKey:following_id;JoinReferences:followed_id"`
-	Blocking    []Users   `json:"blocking" gorm:"many2many:blocking foreignKey:ID;association_foreignKey:ID;joinForeignKey:blocking_id;JoinReferences:blocked_id"`
+	Following   []Users   `json:"following" gorm:"many2many:following; foreignKey:ID;association_foreignKey:ID;joinForeignKey:followed_id;JoinReferences:following_id"`
+	Followed    []Users   `json:"followed" gorm:"many2many:following; foreignKey:ID;association_foreignKey:ID;joinForeignKey:following_id;JoinReferences:followed_id"`
+	Blocking    []Users   `json:"blocking" gorm:"many2many:blocking; foreignKey:ID;association_foreignKey:ID;joinForeignKey:blocking_id;JoinReferences:blocked_id"`
 	Encountered Encounter `json:"encountered" gorm:"foreignKey:PassingId;"`
 }
 
