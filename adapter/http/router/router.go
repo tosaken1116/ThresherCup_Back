@@ -9,9 +9,9 @@ import (
 
 func InitRouter() *gin.Engine {
 	r := gin.Default()
-	r.Use(middleware.Auth())
 	api := r.Group("/api")
 	{
+		api.Use(middleware.Auth())
 		v1 := api.Group("/v1")
 		{
 			v1.GET("/health", func(c *gin.Context) {
