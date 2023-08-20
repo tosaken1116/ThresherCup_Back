@@ -72,6 +72,8 @@ paths:
       tags:
       - post
 securityDefinitions:
-  BearerAuth:
-    type: basic
+  Bearer:
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"

@@ -17,7 +17,7 @@ import (
 // @description This is Thresher hackathon backend.
 
 // @BasePath /api/v1
-// @securityDefinitions.basic BearerAuth
+// @securityDefinitions.apikey Bearer
 // @in header
 // @name Authorization
 func main() {

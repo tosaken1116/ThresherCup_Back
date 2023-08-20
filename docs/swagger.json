@@ -112,8 +112,10 @@
         }
     },
     "securityDefinitions": {
-        "BearerAuth": {
-            "type": "basic"
+        "Bearer": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
         }
     }
 }
