@@ -2,12 +2,14 @@ package router
 
 import (
 	"net/http"
+	"thresher/utils/middleware"
 
 	"github.com/gin-gonic/gin"
 )
 
 func InitRouter() *gin.Engine {
 	r := gin.Default()
+	r.Use(middleware.Auth())
 	api := r.Group("/api")
 	{
 		v1 := api.Group("/v1")

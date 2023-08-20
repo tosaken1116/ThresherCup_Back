@@ -10,9 +10,13 @@ import (
 type AppCon struct {
 	Srv *srvCon
 	Db  *dbCon
+	Token *token
 }
 type srvCon struct {
 	Port string
+}
+type token struct{
+	JwtSecret string
 }
 
 type dbCon struct {
@@ -33,6 +37,8 @@ func LoadConfig() *AppCon {
 	dbName := os.Getenv("POSTGRES_DB")
 	dbPort := os.Getenv("POSTGRES_PORT")
 	srvPort := os.Getenv("PORT")
+	jwtSecret := os.Getenv("JWT_SECRET")
+
 	DbEnv := &dbCon{
 		DbHost: dbHost,
 		DbUser: dbUser,
@@ -43,9 +49,13 @@ func LoadConfig() *AppCon {
 	SrvEnv := &srvCon{
 		Port: srvPort,
 	}
+	token := &token{
+		JwtSecret: jwtSecret,
+	}
 	conf := AppCon{
 		Db:  DbEnv,
 		Srv: SrvEnv,
+		Token: token,
 	}
 	return &conf
 }
