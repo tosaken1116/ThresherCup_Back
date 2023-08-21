@@ -10,6 +10,7 @@ import (
 
 type IPostService interface {
 	GetPostById(ctx *gin.Context, id uuid.UUID) (*model.Posts, *int64, error)
+	CreateNewPost(ctx *gin.Context,userId string, description string) (*model.Posts, error)
 }
 
 type postService struct {
@@ -28,4 +29,12 @@ func (ps postService) GetPostById(ctx *gin.Context, id uuid.UUID) (*model.Posts,
 		return nil, nil, err
 	}
 	return p, likedNum, nil
+}
+
+func (ps postService) CreateNewPost(ctx *gin.Context,userId string, description string) (*model.Posts, error){
+	p,err := ps.repo.CreateNewPost(ctx,userId, description)
+	if err != nil{
+		return nil,err
+	}
+	return p,nil
 }

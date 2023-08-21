@@ -13,6 +13,7 @@ import (
 
 type IPostRepository interface {
 	GetPostById(ctx *gin.Context, id uuid.UUID) (*model.Posts, *int64, error)
+	CreateNewPost(ctx *gin.Context,userId string,description string)(*model.Posts,error)
 }
 
 type postRepository struct {
@@ -25,8 +26,8 @@ func NewPostRepository(db *gorm.DB) IPostRepository {
 	}
 }
 func (pr *postRepository) GetPostById(ctx *gin.Context, id uuid.UUID) (*model.Posts, *int64, error) {
-	p := &model.Posts{ID: id}
-	if err := pr.Db.Preload("User").First(&p).Error; err != nil {
+	p := new(model.Posts)
+	if err := pr.Db.Preload("User").Where("id = ?",id).First(&p).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, nil, errors.New(http.StatusNotFound, "post is not found", fmt.Sprintf("/domain/repository/post\n%s", err.Error()))
 		}
@@ -38,4 +39,15 @@ func (pr *postRepository) GetPostById(ctx *gin.Context, id uuid.UUID) (*model.Po
 	}
 
 	return p, &likeNum, nil
+}
+
+func (pr *postRepository) CreateNewPost(ctx *gin.Context,userId string,description string)(*model.Posts,error){
+	p := &model.Posts{
+		Description: description,
+		UserID: userId,
+	}
+	if err := pr.Db.Preload("Users").Create(&p).Error ; err != nil {
+		return nil,errors.New(http.StatusInternalServerError,"cannot create new post",fmt.Sprintf("/domain/repository/post\n%s", err.Error()))
+	}
+	return p,nil
 }

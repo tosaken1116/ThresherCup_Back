@@ -25,5 +25,6 @@ func InitPostRouter(r *gin.RouterGroup){
 			})
 		})
 		postGroup.GET("/:id",func(c *gin.Context) {postController.GetPostById(c)})
+		postGroup.POST("",func(c *gin.Context) {postController.CreateNewPost(c)})
 	}
 }

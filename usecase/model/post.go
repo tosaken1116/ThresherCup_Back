@@ -7,6 +7,10 @@ import (
 	"github.com/google/uuid"
 )
 
+type InputPost struct{
+	Description string `json:"description"`
+}
+
 type Post struct {
 	ID          uuid.UUID `json:"id"`
 	Description string    `json:"description"`
