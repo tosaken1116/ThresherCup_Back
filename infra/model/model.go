@@ -7,7 +7,7 @@ import (
 )
 
 type Users struct {
-	ID        uuid.UUID `json:"id" gorm:"primary_key"`
+	ID        string `json:"id" gorm:"primary_key"`
 	Name      string    `json:"name"`
 	ImageUrl  string    `json:"image_url"`
 	Email     string    `json:"email" gorm:"unique"`
@@ -26,7 +26,7 @@ type Posts struct {
 	Description string    `json:"description"`
 	CreatedAt   time.Time `json:"created_at"`
 	DeletedAt   time.Time `json:"deleted_at"`
-	UserID      uuid.UUID `json:"user_id"`
+	UserID      string `json:"user_id"`
 
 	User  Users   `json:"user"`
 	Liked []Users `json:"liked" gorm:"many2many:likes"`
@@ -34,7 +34,7 @@ type Posts struct {
 
 type Home struct {
 	ID           uuid.UUID `json:"id" gorm:"primary_key"`
-	UserID       uuid.UUID `json:"user_id"`
+	UserID       string `json:"user_id"`
 	Longitude    string    `json:"longitude"`
 	Latitude     string    `json:"latitude"`
 	NonPassRange uint16    `json:"non_pass_range"`
@@ -46,7 +46,7 @@ type Location struct {
 	Longitude string    `json:"longitude"`
 	Latitude  string    `json:"latitude"`
 	CreatedAt time.Time `json:"created_at"`
-	UserID    uuid.UUID `json:"user_id"`
+	UserID    string `json:"user_id"`
 
 	User Users `json:"user"`
 }
