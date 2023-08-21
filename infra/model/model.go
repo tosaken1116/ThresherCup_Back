@@ -4,7 +4,27 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+	"gorm.io/gorm"
 )
+func (base *Base) BeforeCreate(tx *gorm.DB) (err error) {
+	base.ID = uuid.New()
+	return
+}
+
+func (p *Posts) AfterCreate(tx *gorm.DB) (err error) {
+    return tx.Model(p).Preload("User").Find(p).Error
+}
+func (h *Home) AfterCreate(tx *gorm.DB) (err error) {
+    return tx.Model(h).Preload("User").Find(h).Error
+}
+func (l *Location) AfterCreate(tx *gorm.DB) (err error) {
+    return tx.Model(l).Preload("User").Find(l).Error
+}
+
+
+type Base struct {
+	ID        uuid.UUID `json:"id" gorm:"type:uuid;not null;primaryKey"`
+}
 
 type Users struct {
 	ID        string `json:"id" gorm:"primary_key"`
@@ -22,7 +42,7 @@ type Users struct {
 }
 
 type Posts struct {
-	ID          uuid.UUID `json:"id" gorm:"primary_key"`
+	Base
 	Description string    `json:"description"`
 	CreatedAt   time.Time `json:"created_at"`
 	DeletedAt   time.Time `json:"deleted_at"`
@@ -33,7 +53,7 @@ type Posts struct {
 }
 
 type Home struct {
-	ID           uuid.UUID `json:"id" gorm:"primary_key"`
+	Base
 	UserID       string `json:"user_id"`
 	Longitude    string    `json:"longitude"`
 	Latitude     string    `json:"latitude"`
@@ -43,6 +63,7 @@ type Home struct {
 }
 
 type Location struct {
+	Base
 	Longitude string    `json:"longitude"`
 	Latitude  string    `json:"latitude"`
 	CreatedAt time.Time `json:"created_at"`
@@ -52,6 +73,7 @@ type Location struct {
 }
 
 type Encounter struct {
+	Base
 	Longitude string    `json:"longitude"`
 	Latitude  string    `json:"latitude"`
 	CreatedAt time.Time `json:"created_at"`
