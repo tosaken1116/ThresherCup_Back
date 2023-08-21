@@ -1,13 +1,14 @@
 package middleware
 
 import (
+	e "errors"
+	"log"
 	"net/http"
 	"strings"
 	"thresher/utils/errors"
-	j "thresher/utils/jwt"
+	"thresher/utils/firebase"
 
 	"github.com/gin-gonic/gin"
-	"github.com/golang-jwt/jwt"
 )
 
 func Auth() gin.HandlerFunc{
@@ -22,19 +23,20 @@ func Auth() gin.HandlerFunc{
 			ctx.JSON(http.StatusUnauthorized,errors.ErrorResponse{StatusText: "Unauthorized",Detail: "invalid token format"})
 			ctx.Abort()
 		}
-		t,err := j.ValidateJwt(splitToken[1])
+		t,err := firebase.CheckFirebaseJWT(splitToken[1])
 		if err != nil{
-			ctx.JSON(http.StatusUnauthorized,errors.ErrorResponse{StatusText: "Unauthorized",Detail: "cannot decode token"})
+			RenderError(ctx,err)
 			ctx.Abort()
 		}
-		if claims, ok := t.Claims.(*jwt.MapClaims); ok && t.Valid{
-			userId := (*claims)["sub"].(string)
-			ctx.Set("userId", userId)
-		}else{
-			ctx.JSON(http.StatusUnauthorized,errors.ErrorResponse{StatusText: "Unauthorized",Detail: "invalid token format"})
-			ctx.Abort()
-		}
-
-
+		ctx.Set("userId", t.UserId)
     }
+}
+func RenderError(ctx *gin.Context,err error) {
+	if e, ok := err.(*errors.Error); ok {
+		log.Println(err.Error())
+		ctx.JSON(e.StatusCode, errors.ErrorResponse{StatusText: e.StatusText, Detail: e.Detail})
+		return
+	}
+	log.Println(err.Error())
+	ctx.JSON(http.StatusInternalServerError, e.New("unknown error"))
 }
