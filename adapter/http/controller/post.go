@@ -3,7 +3,6 @@ package controller
 import (
 	"thresher/adapter/http/presenter"
 	"thresher/usecase"
-	_ "thresher/utils/errors"
 
 	"github.com/gin-gonic/gin"
 )
@@ -26,7 +25,7 @@ func NewPostController(pu usecase.IPostUsecase) IPostController {
 // @Tags post
 // @Accept  json
 // @Produce  json
-// @securityDefinitions.basic BasicAuth
+// @Security Bearer
 // @Param       id   path   string   true  "ID"
 // @Success 200 {object} model.Post
 // @Failure 400 {object} errors.ErrorResponse

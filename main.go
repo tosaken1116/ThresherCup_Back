@@ -20,6 +20,9 @@ import (
 // @securityDefinitions.apikey Bearer
 // @in header
 // @name Authorization
+// @description Type "Bearer" followed by a space and JWT token.
+// @in header
+// @name Authorization
 func main() {
 	infra.InitDatabase()
 	con := config.LoadConfig()
