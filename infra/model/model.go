@@ -27,10 +27,10 @@ type Base struct {
 }
 
 type Users struct {
-	ID        string `json:"id" gorm:"primary_key"`
-	Name      string    `json:"name"`
-	ImageUrl  string    `json:"image_url"`
-	Email     string    `json:"email" gorm:"unique"`
+	ID        string `json:"id" gorm:"primary_key; not null"`
+	Name      string    `json:"name" gorm:"not null"`
+	ImageUrl  string    `json:"image_url" gorm:"not null"`
+	Email     string    `json:"email" gorm:"unique; not null"`
 	CreatedAt time.Time `json:"created_at"`
 	DeletedAt time.Time `json:"deleted_at"`
 
@@ -43,10 +43,10 @@ type Users struct {
 
 type Posts struct {
 	Base
-	Description string    `json:"description"`
+	Description string    `json:"description" gorm:"not null"`
 	CreatedAt   time.Time `json:"created_at"`
 	DeletedAt   time.Time `json:"deleted_at"`
-	UserID      string `json:"user_id"`
+	UserID      string `json:"user_id" gorm:"not null"`
 
 	User  Users   `json:"user"`
 	Liked []Users `json:"liked" gorm:"many2many:likes"`
@@ -54,29 +54,29 @@ type Posts struct {
 
 type Home struct {
 	Base
-	UserID       string `json:"user_id"`
-	Longitude    string    `json:"longitude"`
-	Latitude     string    `json:"latitude"`
-	NonPassRange uint16    `json:"non_pass_range"`
+	UserID       string `json:"user_id" gorm:"not null"`
+	Longitude    string    `json:"longitude" gorm:"not null"`
+	Latitude     string    `json:"latitude" gorm:"not null"`
+	NonPassRange uint16    `json:"non_pass_range" gorm:"not null"`
 
 	User Users `json:"user"`
 }
 
 type Location struct {
 	Base
-	Longitude string    `json:"longitude"`
-	Latitude  string    `json:"latitude"`
+	Longitude string    `json:"longitude" gorm:"not null"`
+	Latitude  string    `json:"latitude" gorm:"not null"`
 	CreatedAt time.Time `json:"created_at"`
-	UserID    string `json:"user_id"`
+	UserID    string `json:"user_id" gorm:"not null"`
 
 	User Users `json:"user"`
 }
 
 type Encounter struct {
 	Base
-	Longitude string    `json:"longitude"`
-	Latitude  string    `json:"latitude"`
+	Longitude string    `json:"longitude" gorm:"not null"`
+	Latitude  string    `json:"latitude" gorm:"not null"`
 	CreatedAt time.Time `json:"created_at"`
-	PassingId uuid.UUID `json:"passing_id"`
-	PassedId  uuid.UUID `json:"passed_id"`
+	PassingId uuid.UUID `json:"passing_id" gorm:"not null"`
+	PassedId  uuid.UUID `json:"passed_id" gorm:"not null"`
 }
