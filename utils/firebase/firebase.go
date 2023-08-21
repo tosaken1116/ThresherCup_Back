@@ -7,7 +7,6 @@ import (
 	"encoding/json"
 	"encoding/pem"
 	"io"
-	"log"
 	"net/http"
 	"strings"
 	"thresher/utils/errors"
@@ -15,6 +14,7 @@ import (
 
 	"github.com/golang-jwt/jwt"
 )
+
 // reference to https://zenn.dev/takoyaki3/articles/a5f59a8c01d51a
 type CustomClaims struct {
 	Name     string `json:"name"`
@@ -60,14 +60,12 @@ func CheckFirebaseJWT(tokenString string)(*CustomClaims,error){
 	// decode the header
 	headerJson, err := base64.RawURLEncoding.DecodeString(parts[0])
 	if err != nil {
-		log.Fatalf("Error decoding JWT header:", err)
 		return nil,errors.New(http.StatusInternalServerError,"failed to decode JWT header","/utils/firebase/firebase")
 	}
 
 	var header map[string]interface{}
 	err = json.Unmarshal(headerJson, &header)
 	if err != nil {
-		log.Fatalf("Error unmarshalling JWT header:", err)
 		return nil,errors.New(http.StatusInternalServerError,"failed to unmarshall JWT header","/utils/firebase/firebase")
 	}
 
@@ -75,13 +73,11 @@ func CheckFirebaseJWT(tokenString string)(*CustomClaims,error){
 	certString := result[kid].(string)
 	block, _ := pem.Decode([]byte(certString))
 	if block == nil {
-		log.Fatalf("failed to parse PEM block containing the public key")
 		return nil,errors.New(http.StatusInternalServerError,"failed to parse PEM block containing the public key","/utils/firebase/firebase")
 	}
 
 	cert, err := x509.ParseCertificate(block.Bytes)
 	if err != nil {
-		log.Fatalf("failed to parse certificate: ", err)
 		return nil,errors.New(http.StatusInternalServerError,"failed to parse certificate","/utils/firebase/firebase")
 	}
 
