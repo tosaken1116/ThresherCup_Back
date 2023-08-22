@@ -17,6 +17,9 @@ type ErrorResponse struct {
 	StatusText string `json:"status_text"`
 	Detail     string `json:"detail"`
 }
+type SuccessResponse struct {
+	StatusText string `json:"status_text"`
+}
 
 func New(statusCode int, detail string, stack string) error {
 	return &Error{

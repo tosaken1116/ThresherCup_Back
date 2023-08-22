@@ -11,6 +11,7 @@ import (
 type IPostService interface {
 	GetPostById(ctx *gin.Context, id uuid.UUID) (*model.Posts, *int64, error)
 	CreateNewPost(ctx *gin.Context,userId string, description string) (*model.Posts, error)
+	DeletePostById(ctx *gin.Context,userId string,postId uuid.UUID) error
 }
 
 type postService struct {
@@ -37,4 +38,11 @@ func (ps postService) CreateNewPost(ctx *gin.Context,userId string, description 
 		return nil,err
 	}
 	return p,nil
+}
+func (ps postService) DeletePostById(ctx *gin.Context,userId string,postId uuid.UUID) error{
+	err := ps.repo.DeletePostById(ctx,userId,postId)
+	if err != nil{
+		return err
+	}
+	return nil
 }

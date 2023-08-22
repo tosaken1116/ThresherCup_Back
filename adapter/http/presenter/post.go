@@ -13,6 +13,7 @@ import (
 type IPostPresenter interface {
 	RenderPost(post model.Post)
 	RenderError(err error)
+	RenderDeleteSuccess()
 }
 type PostPresenter struct {
 	ctx *gin.Context
@@ -36,4 +37,8 @@ func (pp *PostPresenter) RenderError(err error) {
 	log.Println(err.Error())
 	pp.ctx.JSON(http.StatusInternalServerError, e.New("unknown error"))
 
+}
+
+func (pp *PostPresenter)RenderDeleteSuccess(){
+	pp.ctx.JSON(http.StatusOK,errors.SuccessResponse{StatusText: "ok"})
 }

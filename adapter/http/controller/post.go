@@ -13,6 +13,7 @@ import (
 type IPostController interface {
 	GetPostById(ctx *gin.Context)
 	CreateNewPost(ctx *gin.Context)
+	DeletePostById(ctx *gin.Context)
 }
 
 type postController struct {
@@ -71,4 +72,29 @@ func (pc *postController) CreateNewPost(ctx *gin.Context) {
 		return
 	}
 	presenter.RenderPost(*p)
+}
+
+
+// @Summary 投稿の削除
+// @Tags post
+// @Accept  json
+// @Produce  json
+// @Security Bearer
+// @Param       id   path   string   true  "ID"
+// @Success 200 {object} errors.SuccessResponse
+// @Failure 400 {object} errors.ErrorResponse
+// @Failure 401 {object} errors.ErrorResponse
+// @Failure 403 {object} errors.ErrorResponse
+// @Failure 404 {object} errors.ErrorResponse
+// @Failure 500 {object} errors.ErrorResponse
+// @Router /posts/{id} [delete]
+func (pc *postController) DeletePostById(ctx *gin.Context) {
+	presenter := presenter.NewPostPresenter(ctx)
+	id := ctx.Param("id")
+	err := pc.usc.DeletePostById(ctx, id)
+	if err != nil {
+		presenter.RenderError(err)
+		return
+	}
+	presenter.RenderDeleteSuccess()
 }

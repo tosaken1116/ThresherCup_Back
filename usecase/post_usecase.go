@@ -14,6 +14,7 @@ import (
 type IPostUsecase interface {
 	GetPostById(ctx *gin.Context, id string) (*model.Post, error)
 	CreateNewPost(ctx *gin.Context,input model.InputPost)(*model.Post,error)
+	DeletePostById(ctx *gin.Context, id string)error
 }
 
 type postUsecase struct {
@@ -56,4 +57,20 @@ func (pu *postUsecase) CreateNewPost(ctx *gin.Context,input model.InputPost)(*mo
 		return nil,err
 	}
 	return model.PostFromDomainModel(p,0),nil
+}
+
+func (pu *postUsecase) DeletePostById(ctx *gin.Context, id string)error{
+	userId ,gErr := ctx.Get("userId")
+	if !gErr{
+		return errors.New(http.StatusInternalServerError,"cannot get user_id","/usecase/post_usecase/DeletePostById")
+	}
+	uuid, err := cast.CastStringToUUID(id)
+	if err != nil {
+		return  errors.New(http.StatusBadRequest, "id cannot be casted correctly", "/usecase/post_usecase/DeletePostById")
+	}
+	err = pu.svc.DeletePostById(ctx,userId.(string), *uuid)
+	if err != nil {
+		return err
+	}
+	return  nil
 }
