@@ -55,8 +55,8 @@ type Posts struct {
 type Home struct {
 	Base
 	UserID       string `json:"user_id" gorm:"not null"`
-	Longitude    string    `json:"longitude" gorm:"not null"`
-	Latitude     string    `json:"latitude" gorm:"not null"`
+	Longitude    float32    `json:"longitude" gorm:"not null"`
+	Latitude     float32    `json:"latitude" gorm:"not null"`
 	NonPassRange uint16    `json:"non_pass_range" gorm:"not null"`
 
 	User Users `json:"user"`
@@ -64,8 +64,8 @@ type Home struct {
 
 type Location struct {
 	Base
-	Longitude string    `json:"longitude" gorm:"not null"`
-	Latitude  string    `json:"latitude" gorm:"not null"`
+	Longitude float32    `json:"longitude" gorm:"not null"`
+	Latitude  float32    `json:"latitude" gorm:"not null"`
 	CreatedAt time.Time `json:"created_at"`
 	UserID    string `json:"user_id" gorm:"not null"`
 
@@ -74,8 +74,8 @@ type Location struct {
 
 type Encounter struct {
 	Base
-	Longitude string    `json:"longitude" gorm:"not null"`
-	Latitude  string    `json:"latitude" gorm:"not null"`
+	Longitude float32    `json:"longitude" gorm:"not null"`
+	Latitude  float32    `json:"latitude" gorm:"not null"`
 	CreatedAt time.Time `json:"created_at"`
 	PassingId uuid.UUID `json:"passing_id" gorm:"not null"`
 	PassedId  uuid.UUID `json:"passed_id" gorm:"not null"`
