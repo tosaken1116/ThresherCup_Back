@@ -53,8 +53,7 @@ type Posts struct {
 }
 
 type Home struct {
-	Base
-	UserID       string `json:"user_id" gorm:"not null"`
+	UserID       string `json:"user_id" gorm:"primaryKey; not null"`
 	Longitude    float32    `json:"longitude" gorm:"not null"`
 	Latitude     float32    `json:"latitude" gorm:"not null"`
 	NonPassRange uint16    `json:"non_pass_range" gorm:"not null"`
