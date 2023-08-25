@@ -12,6 +12,15 @@ definitions:
       status_text:
         type: string
     type: object
+  model.InputHome:
+    properties:
+      latitude:
+        type: number
+      longitude:
+        type: number
+      non_pass_range:
+        type: integer
+    type: object
   model.Post:
     properties:
       created_at:
@@ -24,6 +33,19 @@ definitions:
         type: integer
       user:
         $ref: '#/definitions/thresher_usecase_model.Users'
+    type: object
+  thresher_usecase_model.Home:
+    properties:
+      latitude:
+        type: number
+      longitude:
+        type: number
+      non_pass_range:
+        type: integer
+      user:
+        $ref: '#/definitions/thresher_usecase_model.Users'
+      user_id:
+        type: string
     type: object
   thresher_usecase_model.Users:
     properties:
@@ -44,6 +66,49 @@ info:
   title: Thresher
   version: "1.0"
 paths:
+  /home:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Home
+        in: body
+        name: Home
+        required: true
+        schema:
+          $ref: '#/definitions/model.InputHome'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/thresher_usecase_model.Home'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errors.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/errors.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/errors.ErrorResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/errors.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errors.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: 家の作成
+      tags:
+      - home
   /posts:
     post:
       consumes:
