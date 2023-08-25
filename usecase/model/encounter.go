@@ -8,8 +8,8 @@ import (
 )
 
 type Encounter struct {
-	Longitude string    `json:"longitude"`
-	Latitude  string    `json:"latitude"`
+	Longitude float32    `json:"longitude"`
+	Latitude  float32    `json:"latitude"`
 	CreatedAt time.Time `json:"created_at"`
 	PassingId uuid.UUID `json:"passing_id"`
 	PassedId  uuid.UUID `json:"passed_id"`

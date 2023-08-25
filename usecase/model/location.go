@@ -6,8 +6,8 @@ import (
 )
 
 type Location struct {
-	Longitude string    `json:"longitude"`
-	Latitude  string    `json:"latitude"`
+	Longitude float32    `json:"longitude"`
+	Latitude  float32    `json:"latitude"`
 	CreatedAt time.Time `json:"created_at"`
 	UserID    string `json:"user_id"`
 }
