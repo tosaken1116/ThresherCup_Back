@@ -11,7 +11,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func InitHomeRouter(r *gin.RouterGroup){
+func InitHomeRouter(r *gin.RouterGroup) {
 	db := infra.NewPostgresConnector()
 	homeRepository := repository.NewHomeRepository(db.Conn)
 	homeService := service.NewHomeService(homeRepository)
@@ -25,6 +25,7 @@ func InitHomeRouter(r *gin.RouterGroup){
 				"status": "OK",
 			})
 		})
-		homeGroup.POST("",func(c *gin.Context) {homeController.CreateNewHome(c)})
+		homeGroup.POST("", func(c *gin.Context) { homeController.CreateNewHome(c) })
+		homeGroup.GET("", func(c *gin.Context) { homeController.GetMyHome(c) })
 	}
 }
