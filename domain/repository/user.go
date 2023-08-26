@@ -13,6 +13,7 @@ import (
 type IUserRepository interface {
 	UpdateUser(ctx *gin.Context, userId string, name *string, description *string) error
 	GetFollowing(ctx *gin.Context,userId string)(*[]model.Users,error)
+	GetFollowed(ctx *gin.Context,userId string)(*[]model.Users,error)
 }
 
 type userRepository struct {
@@ -53,13 +54,30 @@ func (ur *userRepository)GetFollowing(ctx *gin.Context,userId string)(*[]model.U
 	}
 	if err := ur.Db.First(&u).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil,errors.New(http.StatusNotFound, "user is not found", fmt.Sprintf("/domain/repository/user/UpdateUser\n%d", err))
+			return nil,errors.New(http.StatusNotFound, "user is not found", fmt.Sprintf("/domain/repository/user/GetFollowed\n%d", err))
 		}
-		return nil, errors.New(http.StatusInternalServerError, "can not get user", fmt.Sprintf("/domain/repository/user/UpdateUser\n%d", err))
+		return nil, errors.New(http.StatusInternalServerError, "can not get user", fmt.Sprintf("/domain/repository/user/GetFollowed\n%d", err))
 	}
 	var following *[]model.Users
 	if err := ur.Db.Model(&u).Association("Following").Find(&following); err != nil {
-		return nil,errors.New(http.StatusInternalServerError, "can not get following", fmt.Sprintf("/domain/repository/UpdateUser\n%d", err))
+		return nil,errors.New(http.StatusInternalServerError, "can not get following", fmt.Sprintf("/domain/repository/GetFollowed\n%d", err))
 	}
 	return following, nil
+}
+
+func (ur *userRepository)GetFollowed(ctx *gin.Context,userId string)(*[]model.Users,error){
+	u := model.Users{
+		ID: userId,
+	}
+	if err := ur.Db.First(&u).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil,errors.New(http.StatusNotFound, "user is not found", fmt.Sprintf("/domain/repository/user/GetFollowed\n%d", err))
+		}
+		return nil, errors.New(http.StatusInternalServerError, "can not get user", fmt.Sprintf("/domain/repository/user/GetFollowed\n%d", err))
+	}
+	var followed *[]model.Users
+	if err := ur.Db.Model(&u).Association("Followed").Find(&followed); err != nil {
+		return nil,errors.New(http.StatusInternalServerError, "can not get followed", fmt.Sprintf("/domain/repository/GetFollowed\n%d", err))
+	}
+	return followed, nil
 }

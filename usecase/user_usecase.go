@@ -12,6 +12,7 @@ import (
 type IUserUsecase interface {
 	UpdateUser(ctx *gin.Context, input model.UpdateUser) error
 	GetFollowing(ctx *gin.Context) (*[]model.Users, error)
+	GetFollowed(ctx *gin.Context) (*[]model.Users, error)
 }
 
 type userUsecase struct {
@@ -42,6 +43,18 @@ func (uu *userUsecase) GetFollowing(ctx *gin.Context) (*[]model.Users, error) {
 		return nil,errors.New(http.StatusInternalServerError, "cannot get user_id", "/usecase/user_usecase/GetFollowing")
 	}
 	u,err := uu.svc.GetFollowing(ctx,userId.(string))
+	if err != nil{
+		return nil,err
+	}
+	return model.UsersFromDomainModels(u),nil
+}
+
+func (uu *userUsecase)GetFollowed(ctx *gin.Context) (*[]model.Users, error){
+	userId ,gErr := ctx.Get("userId")
+	if !gErr{
+		return nil,errors.New(http.StatusInternalServerError, "cannot get user_id", "/usecase/user_usecase/GetFollowed")
+	}
+	u,err := uu.svc.GetFollowed(ctx,userId.(string))
 	if err != nil{
 		return nil,err
 	}
