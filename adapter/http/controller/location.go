@@ -18,9 +18,9 @@ type locationController struct {
 	usc usecase.ILocationUsecase
 }
 
-func NewLocationController(hu usecase.ILocationUsecase) ILocationController {
+func NewLocationController(lu usecase.ILocationUsecase) ILocationController {
 	return &locationController{
-		usc: hu,
+		usc: lu,
 	}
 }
 

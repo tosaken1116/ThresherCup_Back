@@ -10,8 +10,8 @@ type messageController struct {
 	usc usecase.IMessageUsecase
 }
 
-func NewMessageController(hu usecase.IMessageUsecase) IMessageController {
+func NewMessageController(mu usecase.IMessageUsecase) IMessageController {
 	return &messageController{
-		usc: hu,
+		usc: mu,
 	}
 }

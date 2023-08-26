@@ -26,19 +26,19 @@ func NewMessagePresenter(ctx *gin.Context) IMessagePresenter {
 	}
 }
 
-func (ep *MessagePresenter) RenderMessage(message model.Message) {
-	ep.ctx.JSON(http.StatusOK, message)
+func (mp *MessagePresenter) RenderMessage(message model.Message) {
+	mp.ctx.JSON(http.StatusOK, message)
 }
-func (ep *MessagePresenter) RenderMessages(message []model.Message) {
-	ep.ctx.JSON(http.StatusOK, message)
+func (mp *MessagePresenter) RenderMessages(message []model.Message) {
+	mp.ctx.JSON(http.StatusOK, message)
 }
 
-func (ep *MessagePresenter) RenderError(err error) {
+func (mp *MessagePresenter) RenderError(err error) {
 	if e, ok := err.(*errors.Error); ok {
 		log.Println(err.Error())
-		ep.ctx.JSON(e.StatusCode, gin.H{"error": errors.ErrorResponse{StatusText: e.StatusText, Detail: e.Detail}})
+		mp.ctx.JSON(e.StatusCode, gin.H{"error": errors.ErrorResponse{StatusText: e.StatusText, Detail: e.Detail}})
 		return
 	}
 	log.Println(err.Error())
-	ep.ctx.JSON(http.StatusInternalServerError, e.New("unknown error"))
+	mp.ctx.JSON(http.StatusInternalServerError, e.New("unknown error"))
 }
