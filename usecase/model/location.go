@@ -12,6 +12,11 @@ type Location struct {
 	UserID    string `json:"user_id"`
 }
 
+type InputLocation struct{
+	Longitude float32    `json:"longitude"`
+	Latitude  float32    `json:"latitude"`
+}
+
 func LocationFromDomainModel(m *model.Location)*Location{
 	l := &Location{
 		UserID : m.UserID,

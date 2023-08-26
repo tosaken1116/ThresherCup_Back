@@ -21,6 +21,13 @@ definitions:
       non_pass_range:
         type: integer
     type: object
+  model.InputLocation:
+    properties:
+      latitude:
+        type: number
+      longitude:
+        type: number
+    type: object
   model.Post:
     properties:
       created_at:
@@ -57,6 +64,17 @@ definitions:
         type: integer
       user:
         $ref: '#/definitions/thresher_usecase_model.Users'
+      user_id:
+        type: string
+    type: object
+  thresher_usecase_model.Location:
+    properties:
+      created_at:
+        type: string
+      latitude:
+        type: number
+      longitude:
+        type: number
       user_id:
         type: string
     type: object
@@ -150,6 +168,41 @@ paths:
       summary: 家の作成
       tags:
       - home
+  /location:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Location
+        in: body
+        name: Location
+        required: true
+        schema:
+          $ref: '#/definitions/model.InputLocation'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/thresher_usecase_model.Location'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errors.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/errors.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errors.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: 現在地の作成
+      tags:
+      - location
   /posts:
     post:
       consumes:

@@ -132,6 +132,62 @@ const docTemplate = `{
                 }
             }
         },
+        "/location": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "location"
+                ],
+                "summary": "現在地の作成",
+                "parameters": [
+                    {
+                        "description": "Location",
+                        "name": "Location",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.InputLocation"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/thresher_usecase_model.Location"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ErrorResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/posts": {
             "post": {
                 "security": [
@@ -347,6 +403,17 @@ const docTemplate = `{
                 }
             }
         },
+        "model.InputLocation": {
+            "type": "object",
+            "properties": {
+                "latitude": {
+                    "type": "number"
+                },
+                "longitude": {
+                    "type": "number"
+                }
+            }
+        },
         "model.Post": {
             "type": "object",
             "properties": {
@@ -401,6 +468,23 @@ const docTemplate = `{
                 },
                 "user": {
                     "$ref": "#/definitions/thresher_usecase_model.Users"
+                },
+                "user_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "thresher_usecase_model.Location": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "latitude": {
+                    "type": "number"
+                },
+                "longitude": {
+                    "type": "number"
                 },
                 "user_id": {
                     "type": "string"
