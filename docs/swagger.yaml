@@ -41,10 +41,79 @@ definitions:
       user:
         $ref: '#/definitions/thresher_usecase_model.Users'
     type: object
+  model.Posts:
+    properties:
+      created_at:
+        type: string
+      deleted_at:
+        type: string
+      description:
+        type: string
+      id:
+        type: string
+      liked:
+        items:
+          $ref: '#/definitions/thresher_infra_model.Users'
+        type: array
+      user:
+        $ref: '#/definitions/thresher_infra_model.Users'
+      user_id:
+        type: string
+    type: object
   model.UpdateUser:
     properties:
       description:
         type: string
+      name:
+        type: string
+    type: object
+  thresher_infra_model.Encounter:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: string
+      latitude:
+        type: number
+      longitude:
+        type: number
+      passed_id:
+        type: string
+      passing_id:
+        type: string
+    type: object
+  thresher_infra_model.Users:
+    properties:
+      blocking:
+        items:
+          $ref: '#/definitions/thresher_infra_model.Users'
+        type: array
+      created_at:
+        type: string
+      deleted_at:
+        type: string
+      description:
+        type: string
+      email:
+        type: string
+      encountered:
+        $ref: '#/definitions/thresher_infra_model.Encounter'
+      followed:
+        items:
+          $ref: '#/definitions/thresher_infra_model.Users'
+        type: array
+      following:
+        items:
+          $ref: '#/definitions/thresher_infra_model.Users'
+        type: array
+      id:
+        type: string
+      image_url:
+        type: string
+      likes:
+        items:
+          $ref: '#/definitions/model.Posts'
+        type: array
       name:
         type: string
     type: object
@@ -324,6 +393,44 @@ paths:
       security:
       - Bearer: []
       summary: 投稿の取得
+      tags:
+      - post
+  /posts/my:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.Posts'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errors.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/errors.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/errors.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/errors.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errors.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: 自分のタイムラインの取得
       tags:
       - post
   /users:

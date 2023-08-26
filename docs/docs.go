@@ -250,6 +250,66 @@ const docTemplate = `{
                 }
             }
         },
+        "/posts/my": {
+            "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "post"
+                ],
+                "summary": "自分のタイムラインの取得",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/model.Posts"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ErrorResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/errors.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/posts/{id}": {
             "get": {
                 "security": [
@@ -692,11 +752,116 @@ const docTemplate = `{
                 }
             }
         },
+        "model.Posts": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "deleted_at": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "liked": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/thresher_infra_model.Users"
+                    }
+                },
+                "user": {
+                    "$ref": "#/definitions/thresher_infra_model.Users"
+                },
+                "user_id": {
+                    "type": "string"
+                }
+            }
+        },
         "model.UpdateUser": {
             "type": "object",
             "properties": {
                 "description": {
                     "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "thresher_infra_model.Encounter": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "latitude": {
+                    "type": "number"
+                },
+                "longitude": {
+                    "type": "number"
+                },
+                "passed_id": {
+                    "type": "string"
+                },
+                "passing_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "thresher_infra_model.Users": {
+            "type": "object",
+            "properties": {
+                "blocking": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/thresher_infra_model.Users"
+                    }
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "deleted_at": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "encountered": {
+                    "$ref": "#/definitions/thresher_infra_model.Encounter"
+                },
+                "followed": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/thresher_infra_model.Users"
+                    }
+                },
+                "following": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/thresher_infra_model.Users"
+                    }
+                },
+                "id": {
+                    "type": "string"
+                },
+                "image_url": {
+                    "type": "string"
+                },
+                "likes": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Posts"
+                    }
                 },
                 "name": {
                     "type": "string"

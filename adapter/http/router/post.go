@@ -11,7 +11,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func InitPostRouter(r *gin.RouterGroup){
+func InitPostRouter(r *gin.RouterGroup) {
 	db := infra.NewPostgresConnector()
 	postRepository := repository.NewPostRepository(db.Conn)
 	postService := service.NewPostService(postRepository)
@@ -24,8 +24,9 @@ func InitPostRouter(r *gin.RouterGroup){
 				"status": "OK",
 			})
 		})
-		postGroup.GET("/:id",func(c *gin.Context) {postController.GetPostById(c)})
-		postGroup.POST("",func(c *gin.Context) {postController.CreateNewPost(c)})
-		postGroup.DELETE("/:id",func(c *gin.Context) {postController.DeletePostById(c)})
+		postGroup.GET("/:id", func(c *gin.Context) { postController.GetPostById(c) })
+		postGroup.POST("", func(c *gin.Context) { postController.CreateNewPost(c) })
+		postGroup.DELETE("/:id", func(c *gin.Context) { postController.DeletePostById(c) })
+		postGroup.GET("/my", func(c *gin.Context) { postController.GetMyTimeLine(c) })
 	}
 }

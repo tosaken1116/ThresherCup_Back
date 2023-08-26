@@ -14,6 +14,7 @@ type IPostController interface {
 	GetPostById(ctx *gin.Context)
 	CreateNewPost(ctx *gin.Context)
 	DeletePostById(ctx *gin.Context)
+	GetMyTimeLine(ctx *gin.Context)
 }
 
 type postController struct {
@@ -64,16 +65,15 @@ func (pc *postController) CreateNewPost(ctx *gin.Context) {
 	presenter := presenter.NewPostPresenter(ctx)
 	input := model.InputPost{}
 	if err := ctx.ShouldBindJSON(&input); err != nil {
-		presenter.RenderError(errors.New(http.StatusBadRequest,"Invalid Post param","/adapter/http/controller/post/CreateNewPost"))
+		presenter.RenderError(errors.New(http.StatusBadRequest, "Invalid Post param", "/adapter/http/controller/post/CreateNewPost"))
 	}
-	p, err := pc.usc.CreateNewPost(ctx,input)
+	p, err := pc.usc.CreateNewPost(ctx, input)
 	if err != nil {
 		presenter.RenderError(err)
 		return
 	}
 	presenter.RenderPost(*p)
 }
-
 
 // @Summary 投稿の削除
 // @Tags post
@@ -97,4 +97,26 @@ func (pc *postController) DeletePostById(ctx *gin.Context) {
 		return
 	}
 	presenter.RenderDeleteSuccess()
+}
+
+// @Summary 自分のタイムラインの取得
+// @Tags post
+// @Accept  json
+// @Produce  json
+// @Security Bearer
+// @Success 200 {object} []model.Posts
+// @Failure 400 {object} errors.ErrorResponse
+// @Failure 401 {object} errors.ErrorResponse
+// @Failure 403 {object} errors.ErrorResponse
+// @Failure 404 {object} errors.ErrorResponse
+// @Failure 500 {object} errors.ErrorResponse
+// @Router /posts/my [get]
+func (pc *postController) GetMyTimeLine(ctx *gin.Context) {
+	presenter := presenter.NewPostPresenter(ctx)
+	p, err := pc.usc.GetMyTimeLine(ctx)
+	if err != nil {
+		presenter.RenderError(err)
+		return
+	}
+	presenter.RenderPosts(p)
 }

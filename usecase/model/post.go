@@ -7,7 +7,7 @@ import (
 	"github.com/google/uuid"
 )
 
-type InputPost struct{
+type InputPost struct {
 	Description string `json:"description"`
 }
 
@@ -30,4 +30,12 @@ func PostFromDomainModel(m *model.Posts, ln int64) *Post {
 		LikedNum:    ln,
 	}
 	return p
+}
+
+func PostsFromDomainModels(m *[]model.Posts) *[]Post {
+	posts := make([]Post, len(*m))
+	for i, v := range *m {
+		posts[i] = *PostFromDomainModel(&v, int64(len(v.Liked)))
+	}
+	return &posts
 }
