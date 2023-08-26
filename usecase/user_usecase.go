@@ -14,6 +14,7 @@ type IUserUsecase interface {
 	GetFollowing(ctx *gin.Context) (*[]model.Users, error)
 	GetFollowed(ctx *gin.Context) (*[]model.Users, error)
 	CreateFollow(ctx *gin.Context, targetId string) error
+	DeleteFollow(ctx *gin.Context, targetId string) error
 }
 
 type userUsecase struct {
@@ -67,6 +68,17 @@ func (uu *userUsecase) CreateFollow(ctx *gin.Context, targetId string) error {
 		return errors.New(http.StatusInternalServerError, "cannot get user_id", "/usecase/user_usecase/CreateFollow")
 	}
 	err := uu.svc.CreateFollow(ctx, userId.(string), targetId)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+func (uu *userUsecase) DeleteFollow(ctx *gin.Context, targetId string) error {
+	userId, gErr := ctx.Get("userId")
+	if !gErr {
+		return errors.New(http.StatusInternalServerError, "cannot get user_id", "/usecase/user_usecase/DeleteFollow")
+	}
+	err := uu.svc.DeleteFollow(ctx, userId.(string), targetId)
 	if err != nil {
 		return err
 	}

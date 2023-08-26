@@ -15,6 +15,7 @@ type IUserRepository interface {
 	GetFollowing(ctx *gin.Context, userId string) (*[]model.Users, error)
 	GetFollowed(ctx *gin.Context, userId string) (*[]model.Users, error)
 	CreateFollow(ctx *gin.Context, userId string, targetId string) error
+	DeleteFollow(ctx *gin.Context, userId string, targetId string) error
 }
 
 type userRepository struct {
@@ -104,6 +105,31 @@ func (ur *userRepository) CreateFollow(ctx *gin.Context, userId string, targetId
 	}
 	if err := ur.Db.Model(&u).Association("Following").Append(&t); err != nil {
 		return errors.New(http.StatusInternalServerError, "can not create follow", fmt.Sprintf("/domain/repository/user/CreateFollow\n%d", err))
+	}
+	return nil
+}
+
+func (ur *userRepository) DeleteFollow(ctx *gin.Context, userId string, targetId string) error {
+	u := model.Users{
+		ID: userId,
+	}
+	if err := ur.Db.First(&u).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return errors.New(http.StatusNotFound, "user is not found", fmt.Sprintf("/domain/repository/user/DeleteFollow\n%d", err))
+		}
+		return errors.New(http.StatusInternalServerError, "can not get user", fmt.Sprintf("/domain/repository/user/DeleteFollow\n%d", err))
+	}
+	t := model.Users{
+		ID: targetId,
+	}
+	if err := ur.Db.First(&t).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return errors.New(http.StatusNotFound, "target is not found", fmt.Sprintf("/domain/repository/user/DeleteFollow\n%d", err))
+		}
+		return errors.New(http.StatusInternalServerError, "can not get target", fmt.Sprintf("/domain/repository/user/DeleteFollow\n%d", err))
+	}
+	if err := ur.Db.Model(&u).Association("Following").Delete(&t); err != nil {
+		return errors.New(http.StatusInternalServerError, "can not delete follow", fmt.Sprintf("/domain/repository/user/DeleteFollow\n%d", err))
 	}
 	return nil
 }

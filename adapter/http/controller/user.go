@@ -15,6 +15,7 @@ type IUserController interface {
 	GetFollowing(ctx *gin.Context)
 	GetFollowed(ctx *gin.Context)
 	NewFollow(ctx *gin.Context)
+	DeleteFollow(ctx *gin.Context)
 }
 
 type userController struct {
@@ -111,6 +112,29 @@ func (pc *userController) NewFollow(ctx *gin.Context) {
 	id := ctx.Param("id")
 
 	err := pc.usc.CreateFollow(ctx, id)
+	if err != nil {
+		presenter.RenderError(err)
+		return
+	}
+	presenter.RenderFollowSuccess()
+}
+
+// @Summary フォロー解除
+// @Tags user
+// @Accept  json
+// @Produce  json
+// @Security Bearer
+// @Param       id   path   string   true  "ID"
+// @Success 200 {object} errors.SuccessResponse
+// @Failure 400 {object} errors.ErrorResponse
+// @Failure 404 {object} errors.ErrorResponse
+// @Failure 500 {object} errors.ErrorResponse
+// @Router /users/follow/{id} [delete]
+func (pc *userController) DeleteFollow(ctx *gin.Context) {
+	presenter := presenter.NewUserPresenter(ctx)
+	id := ctx.Param("id")
+
+	err := pc.usc.DeleteFollow(ctx, id)
 	if err != nil {
 		presenter.RenderError(err)
 		return

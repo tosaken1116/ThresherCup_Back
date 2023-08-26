@@ -12,6 +12,7 @@ type IUserService interface {
 	GetFollowing(ctx *gin.Context, userId string) (*[]model.Users, error)
 	GetFollowed(ctx *gin.Context, userId string) (*[]model.Users, error)
 	CreateFollow(ctx *gin.Context, userId string, targetId string) error
+	DeleteFollow(ctx *gin.Context, userId string, targetId string) error
 }
 
 type userService struct {
@@ -36,4 +37,7 @@ func (us *userService) GetFollowed(ctx *gin.Context, userId string) (*[]model.Us
 }
 func (us *userService) CreateFollow(ctx *gin.Context, userId string, targetId string) error {
 	return us.repo.CreateFollow(ctx, userId, targetId)
+}
+func (us *userService) DeleteFollow(ctx *gin.Context, userId string, targetId string) error {
+	return us.repo.DeleteFollow(ctx, userId, targetId)
 }
