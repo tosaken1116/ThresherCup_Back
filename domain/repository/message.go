@@ -1,7 +1,10 @@
 package repository
 
 import (
+	"fmt"
+	"net/http"
 	"thresher/infra/model"
+	"thresher/utils/errors"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -26,11 +29,15 @@ func NewMessageRepository(db *gorm.DB) IMessageRepository {
 func (mr *messageRepository) GetMessages(ctx *gin.Context, senderId string, responderId string) (*[]model.Message, error) {
 	var messages []model.Message
 	if err := mr.Db.Preload("Sender").Preload("Responder").Where("sender_id = ? AND responder_id = ?", senderId, responderId).Find(&messages).Error; err != nil {
-		return nil, err
+		return nil, errors.New(http.StatusInternalServerError, "cannot get message", fmt.Sprintf("/domain/repository/message.go/GetMessages\n%d", err))
 	}
 	return &messages, nil
 }
 func (mr *messageRepository) CreateMessage(ctx *gin.Context, senderId string, responderId string, content string) error {
+	isFollowing := mr.Db.Table("following").Where("following_id = ? AND followed_id = ?", senderId, responderId).RowsAffected
+	if isFollowing == 0 {
+		return errors.New(http.StatusForbidden, "You are not following this user", "/domain/repository/message.go/GetMessages")
+	}
 	m := &model.Message{
 		SenderID:    senderId,
 		ResponderID: responderId,
