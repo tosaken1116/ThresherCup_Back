@@ -85,6 +85,10 @@ func (ur *userRepository) GetFollowed(ctx *gin.Context, userId string) (*[]model
 }
 
 func (ur *userRepository) CreateFollow(ctx *gin.Context, userId string, targetId string) error {
+	isEncountered := ur.Db.Table("encounter").Where("passing_id = ? AND passed_id = ?", userId, targetId).Or("passing_id = ? AND passed_id = ?", targetId, userId).RowsAffected
+	if isEncountered == 0 {
+		return errors.New(http.StatusForbidden, "You are not encountered this user", "/domain/repository/user/CreateFollow")
+	}
 	u := model.Users{
 		ID: userId,
 	}
