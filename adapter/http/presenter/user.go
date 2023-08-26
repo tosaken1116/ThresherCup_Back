@@ -12,6 +12,7 @@ import (
 
 type IUserPresenter interface {
 	RenderUser(user model.Users)
+	RenderUsers(user *[]model.Users)
 	RenderError(err error)
 	RenderDeleteSuccess()
 	RenderUpdateSuccess()
@@ -28,6 +29,11 @@ func NewUserPresenter(ctx *gin.Context) IUserPresenter {
 func (up *UserPresenter) RenderUser(user model.Users) {
 	up.ctx.JSON(http.StatusOK, user)
 }
+
+func (up *UserPresenter) RenderUsers(user *[]model.Users) {
+	up.ctx.JSON(http.StatusOK, user)
+}
+
 
 func (up *UserPresenter) RenderError(err error) {
 	if e, ok := err.(*errors.Error); ok {

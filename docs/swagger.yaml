@@ -361,6 +361,36 @@ paths:
       summary: ユーザーの更新
       tags:
       - user
+  /users/following:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/thresher_usecase_model.Users'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errors.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/errors.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errors.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: フォロー中のユーザーの取得
+      tags:
+      - user
 securityDefinitions:
   Bearer:
     description: Type "Bearer" followed by a space and JWT token.

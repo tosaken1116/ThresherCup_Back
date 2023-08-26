@@ -27,5 +27,6 @@ func InitUserRouter(r *gin.RouterGroup){
 		userGroup.PUT("",func(c *gin.Context){
 			userController.UpdateUser(c)
 		})
+		userGroup.GET("/following",func(c *gin.Context){userController.GetFollowing(c)})
 	}
 }

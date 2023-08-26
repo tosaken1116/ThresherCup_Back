@@ -27,3 +27,12 @@ func UserFromDomainModel(m *model.Users) *Users {
 	}
 	return u
 }
+
+func UsersFromDomainModels(m *[]model.Users) *[]Users {
+	users := make([]Users, len(*m))
+	for i,v := range *m {
+		users[i] = *UserFromDomainModel(&v)
+	}
+	return &users
+}
+

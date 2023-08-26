@@ -12,6 +12,7 @@ import (
 
 type IUserController interface {
 	UpdateUser(ctx *gin.Context)
+	GetFollowing(ctx *gin.Context)
 }
 
 type userController struct {
@@ -48,4 +49,25 @@ func (pc *userController) UpdateUser(ctx *gin.Context) {
 		return
 	}
 	presenter.RenderUpdateSuccess()
+}
+
+// @Summary フォロー中のユーザーの取得
+// @Tags user
+// @Accept  json
+// @Produce  json
+// @Security Bearer
+// @Success 200 {object} []model.Users
+// @Failure 400 {object} errors.ErrorResponse
+// @Failure 404 {object} errors.ErrorResponse
+// @Failure 500 {object} errors.ErrorResponse
+// @Router /users/following [get]
+func (pc *userController) GetFollowing(ctx *gin.Context) {
+	presenter := presenter.NewUserPresenter(ctx)
+
+	u,err := pc.usc.GetFollowing(ctx)
+	if err != nil {
+		presenter.RenderError(err)
+		return
+	}
+	presenter.RenderUsers(u)
 }
