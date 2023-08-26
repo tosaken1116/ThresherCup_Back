@@ -10,6 +10,7 @@ import (
 type IHomeService interface {
 	CreateNewHome(ctx *gin.Context, userId string, lat float32, lon float32, npr uint16) (*model.Home, error)
 	GetMyHome(ctx *gin.Context, userId string) (*model.Home, error)
+	UpdateMyHome(ctx *gin.Context, userId string, lat float32, lon float32, npr uint16) (*model.Home, error)
 }
 
 type homeService struct {
@@ -31,4 +32,7 @@ func (hs *homeService) CreateNewHome(ctx *gin.Context, userId string, lat float3
 }
 func (hs *homeService) GetMyHome(ctx *gin.Context, userId string) (*model.Home, error) {
 	return hs.repo.GetMyHome(ctx, userId)
+}
+func (hs *homeService) UpdateMyHome(ctx *gin.Context, userId string, lat float32, lon float32, npr uint16) (*model.Home, error) {
+	return hs.repo.UpdateMyHome(ctx, userId, lat, lon, npr)
 }

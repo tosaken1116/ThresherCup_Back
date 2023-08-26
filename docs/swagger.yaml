@@ -60,6 +60,15 @@ definitions:
       user_id:
         type: string
     type: object
+  model.UpdateMyHome:
+    properties:
+      latitude:
+        type: number
+      longitude:
+        type: number
+      non_pass_range:
+        type: integer
+    type: object
   model.UpdateUser:
     properties:
       description:
@@ -279,6 +288,48 @@ paths:
       security:
       - Bearer: []
       summary: 家の作成
+      tags:
+      - home
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: Home
+        in: body
+        name: Home
+        required: true
+        schema:
+          $ref: '#/definitions/model.UpdateMyHome'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/thresher_usecase_model.Home'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errors.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/errors.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/errors.ErrorResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/errors.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errors.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: 家の更新
       tags:
       - home
   /location:

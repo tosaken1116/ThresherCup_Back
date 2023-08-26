@@ -27,5 +27,6 @@ func InitHomeRouter(r *gin.RouterGroup) {
 		})
 		homeGroup.POST("", func(c *gin.Context) { homeController.CreateNewHome(c) })
 		homeGroup.GET("", func(c *gin.Context) { homeController.GetMyHome(c) })
+		homeGroup.PUT("", func(c *gin.Context) { homeController.UpdateMyHome(c) })
 	}
 }

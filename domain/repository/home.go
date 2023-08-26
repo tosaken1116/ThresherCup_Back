@@ -12,6 +12,7 @@ import (
 type IHomeRepository interface {
 	CreateNewHome(ctx *gin.Context, userId string, lat float32, lon float32, npr uint16) (*model.Home, error)
 	GetMyHome(ctx *gin.Context, userId string) (*model.Home, error)
+	UpdateMyHome(ctx *gin.Context, userId string, lat float32, lon float32, npr uint16) (*model.Home, error)
 }
 
 type homeRepository struct {
@@ -43,6 +44,20 @@ func (hr *homeRepository) GetMyHome(ctx *gin.Context, userId string) (*model.Hom
 	h := &model.Home{}
 	if err := hr.Db.Where("user_id = ?", userId).Preload("User").First(&h).Error; err != nil {
 		return nil, errors.New(http.StatusInternalServerError, "cannot get home", "/domain/repository/home/GetMyHome")
+	}
+	return h, nil
+}
+
+func (hr *homeRepository) UpdateMyHome(ctx *gin.Context, userId string, lat float32, lon float32, npr uint16) (*model.Home, error) {
+	h := &model.Home{}
+	if err := hr.Db.Preload("User").Where("user_id = ?", userId).First(&h).Error; err != nil {
+		return nil, errors.New(http.StatusInternalServerError, "cannot get home", "/domain/repository/home/UpdateMyHome")
+	}
+	h.Latitude = lat
+	h.Longitude = lon
+	h.NonPassRange = npr
+	if err := hr.Db.Save(&h).Error; err != nil {
+		return nil, errors.New(http.StatusInternalServerError, "cannot update home", "/domain/repository/home/UpdateMyHome")
 	}
 	return h, nil
 }

@@ -12,6 +12,7 @@ import (
 type IHomeUsecase interface {
 	CreateNewHome(ctx *gin.Context, input model.InputHome) (*model.Home, error)
 	GetMyHome(ctx *gin.Context) (*model.Home, error)
+	UpdateMyHome(ctx *gin.Context, input model.InputHome) (*model.Home, error)
 }
 
 type homeUsecase struct {
@@ -42,6 +43,18 @@ func (hu *homeUsecase) GetMyHome(ctx *gin.Context) (*model.Home, error) {
 		return nil, errors.New(http.StatusInternalServerError, "cannot get user_id", "/usecase/home_usecase/GetMyHome")
 	}
 	h, err := hu.svc.GetMyHome(ctx, userId.(string))
+	if err != nil {
+		return nil, err
+	}
+	return model.HomeFromDomainModel(h), nil
+}
+
+func (hu *homeUsecase) UpdateMyHome(ctx *gin.Context, input model.InputHome) (*model.Home, error) {
+	userId, gErr := ctx.Get("userId")
+	if !gErr {
+		return nil, errors.New(http.StatusInternalServerError, "cannot get user_id", "/usecase/home_usecase/UpdateMyHome")
+	}
+	h, err := hu.svc.UpdateMyHome(ctx, userId.(string), input.Latitude, input.Longitude, input.NonPassRange)
 	if err != nil {
 		return nil, err
 	}
