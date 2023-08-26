@@ -11,7 +11,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func InitLocationRouter(r *gin.RouterGroup){
+func InitLocationRouter(r *gin.RouterGroup) {
 	db := infra.NewPostgresConnector()
 	locationRepository := repository.NewLocationRepository(db.Conn)
 	locationService := service.NewLocationService(locationRepository)
@@ -25,6 +25,7 @@ func InitLocationRouter(r *gin.RouterGroup){
 				"status": "OK",
 			})
 		})
-		locationGroup.POST("", func(c *gin.Context) {homeController.CreateNewLocation(c)})
+		locationGroup.POST("", func(c *gin.Context) { homeController.CreateNewLocation(c) })
+		locationGroup.GET("", func(c *gin.Context) { homeController.GetMyLocations(c) })
 	}
 }
