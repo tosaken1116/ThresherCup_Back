@@ -80,6 +80,8 @@ definitions:
     type: object
   thresher_usecase_model.Users:
     properties:
+      description:
+        type: string
       email:
         type: string
       id:

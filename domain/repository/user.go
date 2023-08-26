@@ -1,6 +1,9 @@
 package repository
 
-import "gorm.io/gorm"
+import (
+	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
+)
 
 type IUserRepository interface {
 }
@@ -14,3 +17,5 @@ func NewUserRepository(db *gorm.DB) IUserRepository {
 		Db: db,
 	}
 }
+
+func (ur *userRepository) UpdateUser(ctx *gin.Context,userId string,)

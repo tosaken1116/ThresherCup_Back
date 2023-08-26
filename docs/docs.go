@@ -494,6 +494,9 @@ const docTemplate = `{
         "thresher_usecase_model.Users": {
             "type": "object",
             "properties": {
+                "description": {
+                    "type": "string"
+                },
                 "email": {
                     "type": "string"
                 },
