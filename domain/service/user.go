@@ -1,15 +1,25 @@
 package service
 
-import "thresher/domain/repository"
+import (
+	"thresher/domain/repository"
 
-type IUserService interface {}
+	"github.com/gin-gonic/gin"
+)
+
+type IUserService interface {
+	UpdateUser(ctx *gin.Context, userId string, name *string, description *string) error
+}
 
 type userService struct {
 	repo repository.IUserRepository
 }
 
-func NewUserService(ur repository.IUserRepository) IUserService{
+func NewUserService(ur repository.IUserRepository) IUserService {
 	return &userService{
-		repo:ur,
+		repo: ur,
 	}
+}
+
+func (us *userService) UpdateUser(ctx *gin.Context, userId string, name *string, description *string) error {
+	return us.repo.UpdateUser(ctx, userId, name, description)
 }

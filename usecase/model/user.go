@@ -12,6 +12,11 @@ type Users struct {
 	Description string `json:"description"`
 }
 
+type UpdateUser struct {
+	Name        *string `json:"name"`
+	Description *string `json:"description"`
+}
+
 func UserFromDomainModel(m *model.Users) *Users {
 	u := &Users{
 		ID:          m.ID,

@@ -41,6 +41,13 @@ definitions:
       user:
         $ref: '#/definitions/thresher_usecase_model.Users'
     type: object
+  model.UpdateUser:
+    properties:
+      description:
+        type: string
+      name:
+        type: string
+    type: object
   thresher_usecase_model.Encounter:
     properties:
       created_at:
@@ -319,6 +326,41 @@ paths:
       summary: 投稿の取得
       tags:
       - post
+  /users:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: User
+        in: body
+        name: User
+        required: true
+        schema:
+          $ref: '#/definitions/model.UpdateUser'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/thresher_usecase_model.Users'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errors.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/errors.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errors.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: 投稿の取得
+      tags:
+      - user
 securityDefinitions:
   Bearer:
     description: Type "Bearer" followed by a space and JWT token.
