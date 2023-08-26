@@ -16,6 +16,7 @@ type IPostUsecase interface {
 	CreateNewPost(ctx *gin.Context, input model.InputPost) (*model.Post, error)
 	DeletePostById(ctx *gin.Context, id string) error
 	GetMyTimeLine(ctx *gin.Context) (*[]model.Post, error)
+	GetFollowTimeline(ctx *gin.Context) (*[]model.Post, error)
 }
 
 type postUsecase struct {
@@ -82,6 +83,18 @@ func (pu *postUsecase) GetMyTimeLine(ctx *gin.Context) (*[]model.Post, error) {
 		return nil, errors.New(http.StatusInternalServerError, "cannot get user_id", "/usecase/post_usecase/GetMyTimeLine")
 	}
 	p, err := pu.svc.GetMyTimeLine(ctx, userId.(string))
+	if err != nil {
+		return nil, err
+	}
+	return model.PostsFromDomainModels(p), nil
+}
+
+func (pu *postUsecase) GetFollowTimeline(ctx *gin.Context) (*[]model.Post, error) {
+	userId, gErr := ctx.Get("userId")
+	if !gErr {
+		return nil, errors.New(http.StatusInternalServerError, "cannot get user_id", "/usecase/post_usecase/GetFollowTimeline")
+	}
+	p, err := pu.svc.GetFollowTimeline(ctx, userId.(string))
 	if err != nil {
 		return nil, err
 	}

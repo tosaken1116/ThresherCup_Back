@@ -28,5 +28,6 @@ func InitPostRouter(r *gin.RouterGroup) {
 		postGroup.POST("", func(c *gin.Context) { postController.CreateNewPost(c) })
 		postGroup.DELETE("/:id", func(c *gin.Context) { postController.DeletePostById(c) })
 		postGroup.GET("/my", func(c *gin.Context) { postController.GetMyTimeLine(c) })
+		postGroup.GET("", func(c *gin.Context) { postController.GetTimeLine(c) })
 	}
 }

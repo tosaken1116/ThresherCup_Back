@@ -16,6 +16,7 @@ type IPostRepository interface {
 	CreateNewPost(ctx *gin.Context, userId string, description string) (*model.Posts, error)
 	DeletePostById(ctx *gin.Context, userId string, postId uuid.UUID) error
 	GetMyTimeLine(ctx *gin.Context, userId string) (*[]model.Posts, error)
+	GetFollowTimeline(ctx *gin.Context, userId string) (*[]model.Posts, error)
 }
 
 type postRepository struct {
@@ -71,6 +72,14 @@ func (pr *postRepository) GetMyTimeLine(ctx *gin.Context, userId string) (*[]mod
 	var posts []model.Posts
 	if err := pr.Db.Preload("User").Where("user_id = ?", userId).Find(&posts).Error; err != nil {
 		return nil, errors.New(http.StatusInternalServerError, "cannot get posts", fmt.Sprintf("/domain/repository/post\n%s", err.Error()))
+	}
+	return &posts, nil
+}
+
+func (pr *postRepository) GetFollowTimeline(ctx *gin.Context, userId string) (*[]model.Posts, error) {
+	var posts []model.Posts
+	if err := pr.Db.Preload("User").Joins("JOIN following ON following.followed_id = posts.user_id").Find(&posts).Error; err != nil {
+		return nil, errors.New(http.StatusInternalServerError, "cannot get posts", fmt.Sprintf("/domain/repository/post\n%d", err))
 	}
 	return &posts, nil
 }

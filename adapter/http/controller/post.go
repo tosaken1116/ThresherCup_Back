@@ -15,6 +15,7 @@ type IPostController interface {
 	CreateNewPost(ctx *gin.Context)
 	DeletePostById(ctx *gin.Context)
 	GetMyTimeLine(ctx *gin.Context)
+	GetTimeLine(ctx *gin.Context)
 }
 
 type postController struct {
@@ -114,6 +115,28 @@ func (pc *postController) DeletePostById(ctx *gin.Context) {
 func (pc *postController) GetMyTimeLine(ctx *gin.Context) {
 	presenter := presenter.NewPostPresenter(ctx)
 	p, err := pc.usc.GetMyTimeLine(ctx)
+	if err != nil {
+		presenter.RenderError(err)
+		return
+	}
+	presenter.RenderPosts(p)
+}
+
+// @Summary フォロワーのタイムラインの取得
+// @Tags post
+// @Accept  json
+// @Produce  json
+// @Security Bearer
+// @Success 200 {object} []model.Post
+// @Failure 400 {object} errors.ErrorResponse
+// @Failure 401 {object} errors.ErrorResponse
+// @Failure 403 {object} errors.ErrorResponse
+// @Failure 404 {object} errors.ErrorResponse
+// @Failure 500 {object} errors.ErrorResponse
+// @Router /posts [get]
+func (pc *postController) GetTimeLine(ctx *gin.Context) {
+	presenter := presenter.NewPostPresenter(ctx)
+	p, err := pc.usc.GetFollowTimeline(ctx)
 	if err != nil {
 		presenter.RenderError(err)
 		return

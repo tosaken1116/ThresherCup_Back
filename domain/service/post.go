@@ -13,6 +13,7 @@ type IPostService interface {
 	CreateNewPost(ctx *gin.Context, userId string, description string) (*model.Posts, error)
 	DeletePostById(ctx *gin.Context, userId string, postId uuid.UUID) error
 	GetMyTimeLine(ctx *gin.Context, userId string) (*[]model.Posts, error)
+	GetFollowTimeline(ctx *gin.Context, userId string) (*[]model.Posts, error)
 }
 
 type postService struct {
@@ -53,4 +54,7 @@ func (ps postService) GetMyTimeLine(ctx *gin.Context, userId string) (*[]model.P
 		return nil, err
 	}
 	return p, nil
+}
+func (ps *postService) GetFollowTimeline(ctx *gin.Context, userId string) (*[]model.Posts, error) {
+	return ps.repo.GetFollowTimeline(ctx, userId)
 }
