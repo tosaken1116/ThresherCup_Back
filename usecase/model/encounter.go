@@ -3,16 +3,14 @@ package model
 import (
 	"thresher/infra/model"
 	"time"
-
-	"github.com/google/uuid"
 )
 
 type Encounter struct {
 	Longitude float32    `json:"longitude"`
 	Latitude  float32    `json:"latitude"`
 	CreatedAt time.Time `json:"created_at"`
-	PassingId uuid.UUID `json:"passing_id"`
-	PassedId  uuid.UUID `json:"passed_id"`
+	PassingId string `json:"passing_id"`
+	PassedId  string `json:"passed_id"`
 }
 
 func EncounterFromDomainModel(m *model.Encounter)*Encounter{
@@ -24,4 +22,12 @@ func EncounterFromDomainModel(m *model.Encounter)*Encounter{
 		PassedId: m.PassedId,
 	}
 	return e
+}
+
+func EncountersFromDomainModels(m *[]model.Encounter)*[]Encounter{
+	encounters := make([]Encounter,len(*m))
+	for i, v := range *m {
+		encounters[i] = *EncounterFromDomainModel(&v)
+	}
+	return &encounters
 }

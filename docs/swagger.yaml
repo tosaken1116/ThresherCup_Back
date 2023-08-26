@@ -34,6 +34,19 @@ definitions:
       user:
         $ref: '#/definitions/thresher_usecase_model.Users'
     type: object
+  thresher_usecase_model.Encounter:
+    properties:
+      created_at:
+        type: string
+      latitude:
+        type: number
+      longitude:
+        type: number
+      passed_id:
+        type: string
+      passing_id:
+        type: string
+    type: object
   thresher_usecase_model.Home:
     properties:
       latitude:
@@ -66,6 +79,34 @@ info:
   title: Thresher
   version: "1.0"
 paths:
+  /encounter:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/thresher_usecase_model.Encounter'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errors.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/errors.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errors.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: すれ違いの取得
+      tags:
+      - encounter
   /home:
     post:
       consumes:
