@@ -36,6 +36,8 @@ func NewUserController(uu usecase.IUserUsecase) IUserController {
 // @Param       User   body   model.UpdateUser   true  "User"
 // @Success 200 {object} model.Users
 // @Failure 400 {object} errors.ErrorResponse
+// @Failure 401 {object} errors.ErrorResponse
+// @Failure 403 {object} errors.ErrorResponse
 // @Failure 404 {object} errors.ErrorResponse
 // @Failure 500 {object} errors.ErrorResponse
 // @Router /users [put]
@@ -61,6 +63,7 @@ func (pc *userController) UpdateUser(ctx *gin.Context) {
 // @Security Bearer
 // @Success 200 {object} []model.Users
 // @Failure 400 {object} errors.ErrorResponse
+// @Failure 401 {object} errors.ErrorResponse
 // @Failure 404 {object} errors.ErrorResponse
 // @Failure 500 {object} errors.ErrorResponse
 // @Router /users/following [get]
@@ -82,6 +85,7 @@ func (pc *userController) GetFollowing(ctx *gin.Context) {
 // @Security Bearer
 // @Success 200 {object} []model.Users
 // @Failure 400 {object} errors.ErrorResponse
+// @Failure 401 {object} errors.ErrorResponse
 // @Failure 404 {object} errors.ErrorResponse
 // @Failure 500 {object} errors.ErrorResponse
 // @Router /users/followed [get]
@@ -104,6 +108,8 @@ func (pc *userController) GetFollowed(ctx *gin.Context) {
 // @Param       id   path   string   true  "ID"
 // @Success 200 {object} errors.SuccessResponse
 // @Failure 400 {object} errors.ErrorResponse
+// @Failure 401 {object} errors.ErrorResponse
+// @Failure 403 {object} errors.ErrorResponse
 // @Failure 404 {object} errors.ErrorResponse
 // @Failure 500 {object} errors.ErrorResponse
 // @Router /users/follow/{id} [post]
@@ -127,6 +133,7 @@ func (pc *userController) NewFollow(ctx *gin.Context) {
 // @Param       id   path   string   true  "ID"
 // @Success 200 {object} errors.SuccessResponse
 // @Failure 400 {object} errors.ErrorResponse
+// @Failure 401 {object} errors.ErrorResponse
 // @Failure 404 {object} errors.ErrorResponse
 // @Failure 500 {object} errors.ErrorResponse
 // @Router /users/follow/{id} [delete]

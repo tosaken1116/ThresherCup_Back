@@ -35,7 +35,8 @@ func NewPostController(pu usecase.IPostUsecase) IPostController {
 // @Security Bearer
 // @Param       id   path   string   true  "ID"
 // @Success 200 {object} model.Post
-// @Failure 400 {object} errors.ErrorResponse
+// @Failure 401 {object} errors.ErrorResponse
+// @Failure 403 {object} errors.ErrorResponse
 // @Failure 404 {object} errors.ErrorResponse
 // @Failure 500 {object} errors.ErrorResponse
 // @Router /posts/{id} [get]
@@ -55,10 +56,10 @@ func (pc *postController) GetPostById(ctx *gin.Context) {
 // @Accept  json
 // @Produce  json
 // @Security Bearer
-// @Param       description   body   string   true  "Description"
+// @Param       description   body   model.InputPost   true  "Description"
 // @Success 200 {object} model.Post
 // @Failure 400 {object} errors.ErrorResponse
-// @Failure 403 {object} errors.ErrorResponse
+// @Failure 401 {object} errors.ErrorResponse
 // @Failure 404 {object} errors.ErrorResponse
 // @Failure 500 {object} errors.ErrorResponse
 // @Router /posts [post]
@@ -108,7 +109,6 @@ func (pc *postController) DeletePostById(ctx *gin.Context) {
 // @Success 200 {object} []model.Posts
 // @Failure 400 {object} errors.ErrorResponse
 // @Failure 401 {object} errors.ErrorResponse
-// @Failure 403 {object} errors.ErrorResponse
 // @Failure 404 {object} errors.ErrorResponse
 // @Failure 500 {object} errors.ErrorResponse
 // @Router /posts/my [get]

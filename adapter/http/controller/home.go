@@ -33,6 +33,7 @@ func NewHomeController(hu usecase.IHomeUsecase) IHomeController {
 // @Param       Home   body   model.InputHome   true  "Home"
 // @Success 200 {object} model.Home
 // @Failure 400 {object} errors.ErrorResponse
+// @Failure 401 {object} errors.ErrorResponse
 // @Failure 403 {object} errors.ErrorResponse
 // @Failure 404 {object} errors.ErrorResponse
 // @Failure 409 {object} errors.ErrorResponse
@@ -59,10 +60,8 @@ func (hc *homeController) CreateNewHome(ctx *gin.Context) {
 // @Produce  json
 // @Security Bearer
 // @Success 200 {object} model.Home
-// @Failure 400 {object} errors.ErrorResponse
-// @Failure 403 {object} errors.ErrorResponse
+// @Failure 401 {object} errors.ErrorResponse
 // @Failure 404 {object} errors.ErrorResponse
-// @Failure 409 {object} errors.ErrorResponse
 // @Failure 500 {object} errors.ErrorResponse
 // @Router /home [get]
 func (hc *homeController) GetMyHome(ctx *gin.Context) {
@@ -83,9 +82,9 @@ func (hc *homeController) GetMyHome(ctx *gin.Context) {
 // @Param       Home   body   model.UpdateMyHome   true  "Home"
 // @Success 200 {object} model.Home
 // @Failure 400 {object} errors.ErrorResponse
+// @Failure 401 {object} errors.ErrorResponse
 // @Failure 403 {object} errors.ErrorResponse
 // @Failure 404 {object} errors.ErrorResponse
-// @Failure 409 {object} errors.ErrorResponse
 // @Failure 500 {object} errors.ErrorResponse
 // @Router /home [put]
 func (hc *homeController) UpdateMyHome(ctx *gin.Context) {

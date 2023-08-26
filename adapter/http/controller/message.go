@@ -33,6 +33,8 @@ func NewMessageController(mu usecase.IMessageUsecase) IMessageController {
 // @Param       id   path   string   true  "ID"
 // @Success 200 {object} []model.Message
 // @Failure 400 {object} errors.ErrorResponse
+// @Failure 401 {object} errors.ErrorResponse
+// @Failure 403 {object} errors.ErrorResponse
 // @Failure 404 {object} errors.ErrorResponse
 // @Failure 500 {object} errors.ErrorResponse
 // @Router /message/{id} [get]
@@ -55,6 +57,8 @@ func (mc *messageController) GetMessages(ctx *gin.Context) {
 // @Param       message   body   model.InputMessage   true  "Message"
 // @Success 200 {object} []model.Message
 // @Failure 400 {object} errors.ErrorResponse
+// @Failure 401 {object} errors.ErrorResponse
+// @Failure 403 {object} errors.ErrorResponse
 // @Failure 404 {object} errors.ErrorResponse
 // @Failure 500 {object} errors.ErrorResponse
 // @Router /message/{id} [post]
@@ -79,6 +83,7 @@ func (mc *messageController) CreateNewMessage(ctx *gin.Context) {
 // @Security Bearer
 // @Success 200 {object} map[string][]model.UnreadMessage
 // @Failure 400 {object} errors.ErrorResponse
+// @Failure 401 {object} errors.ErrorResponse
 // @Failure 404 {object} errors.ErrorResponse
 // @Failure 500 {object} errors.ErrorResponse
 // @Router /message/unread [get]

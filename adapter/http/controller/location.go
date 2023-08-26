@@ -32,7 +32,7 @@ func NewLocationController(lu usecase.ILocationUsecase) ILocationController {
 // @Param       Location   body   model.InputLocation   true  "Location"
 // @Success 200 {object} model.Location
 // @Failure 400 {object} errors.ErrorResponse
-// @Failure 403 {object} errors.ErrorResponse
+// @Failure 401 {object} errors.ErrorResponse
 // @Failure 500 {object} errors.ErrorResponse
 // @Router /location [post]
 func (lc *locationController) CreateNewLocation(ctx *gin.Context) {
@@ -57,6 +57,7 @@ func (lc *locationController) CreateNewLocation(ctx *gin.Context) {
 // @Security Bearer
 // @Success 200 {object} []model.Location
 // @Failure 400 {object} errors.ErrorResponse
+// @Failure 401 {object} errors.ErrorResponse
 // @Failure 403 {object} errors.ErrorResponse
 // @Failure 500 {object} errors.ErrorResponse
 // @Router /location [get]

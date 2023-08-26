@@ -28,14 +28,13 @@ func NewEncounterController(eu usecase.IEncounterUsecase) IEncounterController {
 // @Produce  json
 // @Security Bearer
 // @Success 200 {object} model.Encounter
-// @Failure 400 {object} errors.ErrorResponse
-// @Failure 403 {object} errors.ErrorResponse
+// @Failure 401 {object} errors.ErrorResponse
 // @Failure 500 {object} errors.ErrorResponse
 // @Router /encounter [get]
-func (ec *encounterController) GetEncounter(ctx *gin.Context){
+func (ec *encounterController) GetEncounter(ctx *gin.Context) {
 	presenter := presenter.NewEncounterPresenter(ctx)
-	e,err := ec.usc.GetEncounter(ctx)
-	if err != nil{
+	e, err := ec.usc.GetEncounter(ctx)
+	if err != nil {
 		presenter.RenderError(err)
 		return
 	}
