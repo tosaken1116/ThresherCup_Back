@@ -83,12 +83,12 @@ type Encounter struct {
 
 type Message struct {
 	Base
-	SenderId    string    `json:"sender_id" gorm:"not null"`
-	ResponderId string    `json:"responder_id" gorm:"not null"`
+	SenderID    string    `json:"sender_id" gorm:"not null"`
+	ResponderID string    `json:"responder_id" gorm:"not null"`
 	Content     string    `json:"content" gorm:"not null"`
 	IsRead      bool      `json:"is_read" gorm:"not null; default:false"`
 	CreatedAt   time.Time `json:"created_at"`
 
-	Sender    Users `json:"sender"`
-	Responder Users `json:"responder"`
+	Sender    Users `json:"sender" gorm:"foreignKey:SenderID;"`
+	Responder Users `json:"responder" gorm:"foreignKey:ResponderID;"`
 }

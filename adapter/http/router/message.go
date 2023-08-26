@@ -2,16 +2,21 @@ package router
 
 import (
 	"net/http"
+	"thresher/adapter/http/controller"
+	"thresher/domain/repository"
+	"thresher/domain/service"
+	"thresher/infra"
+	"thresher/usecase"
 
 	"github.com/gin-gonic/gin"
 )
 
 func InitMessageRouter(r *gin.RouterGroup) {
-	// db := infra.NewPostgresConnector()
-	// messageRepository := repository.NewMessageRepository(db.Conn)
-	// messageService := service.NewMessageService(messageRepository)
-	// messageUsecase := usecase.NewMessageUsecase(messageService)
-	// messageController := controller.NewMessageController(messageUsecase)
+	db := infra.NewPostgresConnector()
+	messageRepository := repository.NewMessageRepository(db.Conn)
+	messageService := service.NewMessageService(messageRepository)
+	messageUsecase := usecase.NewMessageUsecase(messageService)
+	messageController := controller.NewMessageController(messageUsecase)
 
 	messageGroup := r.Group("/message")
 	{
@@ -20,5 +25,6 @@ func InitMessageRouter(r *gin.RouterGroup) {
 				"status": "OK",
 			})
 		})
+		messageGroup.GET("/:id", func(c *gin.Context) { messageController.GetMessages(c) })
 	}
 }

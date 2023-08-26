@@ -163,6 +163,19 @@ definitions:
       user_id:
         type: string
     type: object
+  thresher_usecase_model.Message:
+    properties:
+      content:
+        type: string
+      created_at:
+        type: string
+      id:
+        type: string
+      responder:
+        $ref: '#/definitions/thresher_usecase_model.Users'
+      sender:
+        $ref: '#/definitions/thresher_usecase_model.Users'
+    type: object
   thresher_usecase_model.Users:
     properties:
       description:
@@ -396,6 +409,42 @@ paths:
       summary: 現在地の作成
       tags:
       - location
+  /message/{id}:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/thresher_usecase_model.Message'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errors.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/errors.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errors.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: メッセージの取得
+      tags:
+      - message
   /posts:
     get:
       consumes:

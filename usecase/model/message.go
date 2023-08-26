@@ -32,3 +32,11 @@ func MessageFromDomainModel(m *model.Message) *Message {
 	}
 	return ms
 }
+
+func MessagesFromDomainModels(m *[]model.Message) *[]Message {
+	messages := make([]Message, len(*m))
+	for i, v := range *m {
+		messages[i] = *MessageFromDomainModel(&v)
+	}
+	return &messages
+}
