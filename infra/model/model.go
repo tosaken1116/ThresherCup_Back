@@ -88,4 +88,7 @@ type Message struct {
 	Content     string    `json:"content" gorm:"not null"`
 	IsRead      bool      `json:"is_read" gorm:"not null; default:false"`
 	CreatedAt   time.Time `json:"created_at"`
+
+	Sender    Users `json:"sender"`
+	Responder Users `json:"responder"`
 }
