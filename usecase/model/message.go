@@ -8,7 +8,7 @@ import (
 )
 
 type InputMessage struct {
-	Description string `json:"description"`
+	Content string `json:"content"`
 }
 
 type Message struct {

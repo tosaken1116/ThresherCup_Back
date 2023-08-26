@@ -14,6 +14,7 @@ type IMessagePresenter interface {
 	RenderMessage(Message model.Message)
 	RenderMessages(Message []model.Message)
 	RenderError(err error)
+	RenderSuccess()
 }
 
 type MessagePresenter struct {
@@ -41,4 +42,7 @@ func (mp *MessagePresenter) RenderError(err error) {
 	}
 	log.Println(err.Error())
 	mp.ctx.JSON(http.StatusInternalServerError, e.New("unknown error"))
+}
+func (mp *MessagePresenter) RenderSuccess() {
+	mp.ctx.JSON(http.StatusOK, errors.SuccessResponse{StatusText: "ok"})
 }

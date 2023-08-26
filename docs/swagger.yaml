@@ -28,6 +28,11 @@ definitions:
       longitude:
         type: number
     type: object
+  model.InputMessage:
+    properties:
+      content:
+        type: string
+    type: object
   model.Post:
     properties:
       created_at:
@@ -443,6 +448,47 @@ paths:
       security:
       - Bearer: []
       summary: メッセージの取得
+      tags:
+      - message
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Message
+        in: body
+        name: message
+        required: true
+        schema:
+          $ref: '#/definitions/model.InputMessage'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/thresher_usecase_model.Message'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errors.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/errors.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errors.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: メッセージの作成
       tags:
       - message
   /posts:

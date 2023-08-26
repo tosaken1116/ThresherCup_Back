@@ -11,6 +11,7 @@ import (
 
 type IMessageUsecase interface {
 	GetMessages(ctx *gin.Context, responderId string) (*[]model.Message, error)
+	CreateNewMessage(ctx *gin.Context, responderId string, input model.InputMessage) error
 }
 
 type messageUsecase struct {
@@ -33,4 +34,16 @@ func (mu *messageUsecase) GetMessages(ctx *gin.Context, responderId string) (*[]
 		return nil, err
 	}
 	return model.MessagesFromDomainModels(m), nil
+}
+
+func (mu *messageUsecase) CreateNewMessage(ctx *gin.Context, responderId string, input model.InputMessage) error {
+	userId, gErr := ctx.Get("userId")
+	if !gErr {
+		return errors.New(http.StatusInternalServerError, "cannot get user_id", "/usecase/location_usecase/CreateNewLocation")
+	}
+	err := mu.svc.CreateMessage(ctx, userId.(string), responderId, input.Content)
+	if err != nil {
+		return err
+	}
+	return nil
 }

@@ -9,6 +9,7 @@ import (
 
 type IMessageRepository interface {
 	GetMessages(ctx *gin.Context, senderId string, responderId string) (*[]model.Message, error)
+	CreateMessage(ctx *gin.Context, senderId string, responderId string, content string) error
 }
 
 type messageRepository struct {
@@ -27,4 +28,15 @@ func (mr *messageRepository) GetMessages(ctx *gin.Context, senderId string, resp
 		return nil, err
 	}
 	return &messages, nil
+}
+func (mr *messageRepository) CreateMessage(ctx *gin.Context, senderId string, responderId string, content string) error {
+	m := &model.Message{
+		SenderID:    senderId,
+		ResponderID: responderId,
+		Content:     content,
+	}
+	if err := mr.Db.Create(&m).Error; err != nil {
+		return err
+	}
+	return nil
 }
