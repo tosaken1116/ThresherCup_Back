@@ -13,6 +13,7 @@ import (
 type IMessageController interface {
 	GetMessages(ctx *gin.Context)
 	CreateNewMessage(ctx *gin.Context)
+	GetUnreadMessages(ctx *gin.Context)
 }
 type messageController struct {
 	usc usecase.IMessageUsecase
@@ -69,4 +70,24 @@ func (mc *messageController) CreateNewMessage(ctx *gin.Context) {
 		return
 	}
 	presenter.RenderSuccess()
+}
+
+// @Summary 未読メッセージの取得
+// @Tags message
+// @Accept  json
+// @Produce  json
+// @Security Bearer
+// @Success 200 {object} map[string][]model.UnreadMessage
+// @Failure 400 {object} errors.ErrorResponse
+// @Failure 404 {object} errors.ErrorResponse
+// @Failure 500 {object} errors.ErrorResponse
+// @Router /message/unread [get]
+func (mc *messageController) GetUnreadMessages(ctx *gin.Context) {
+	presenter := presenter.NewMessagePresenter(ctx)
+	m, err := mc.usc.GetUnreadMessages(ctx)
+	if err != nil {
+		presenter.RenderError(err)
+		return
+	}
+	presenter.RenderUnreadMessages(*m)
 }

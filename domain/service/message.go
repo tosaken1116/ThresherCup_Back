@@ -10,6 +10,7 @@ import (
 type IMessageService interface {
 	GetMessages(ctx *gin.Context, senderId string, responderId string) (*[]model.Message, error)
 	CreateMessage(ctx *gin.Context, senderId string, responderId string, content string) error
+	GetUnreadMessages(ctx *gin.Context, userId string) (*[]model.Message, error)
 }
 
 type messageService struct {
@@ -27,4 +28,7 @@ func (ms *messageService) GetMessages(ctx *gin.Context, senderId string, respond
 }
 func (ms *messageService) CreateMessage(ctx *gin.Context, senderId string, responderId string, content string) error {
 	return ms.repo.CreateMessage(ctx, senderId, responderId, content)
+}
+func (ms *messageService) GetUnreadMessages(ctx *gin.Context, userId string) (*[]model.Message, error) {
+	return ms.repo.GetUnreadMessages(ctx, userId)
 }

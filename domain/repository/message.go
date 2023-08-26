@@ -10,6 +10,7 @@ import (
 type IMessageRepository interface {
 	GetMessages(ctx *gin.Context, senderId string, responderId string) (*[]model.Message, error)
 	CreateMessage(ctx *gin.Context, senderId string, responderId string, content string) error
+	GetUnreadMessages(ctx *gin.Context, userId string) (*[]model.Message, error)
 }
 
 type messageRepository struct {
@@ -39,4 +40,12 @@ func (mr *messageRepository) CreateMessage(ctx *gin.Context, senderId string, re
 		return err
 	}
 	return nil
+}
+
+func (mr *messageRepository) GetUnreadMessages(ctx *gin.Context, userId string) (*[]model.Message, error) {
+	var messages []model.Message
+	if err := mr.Db.Preload("Sender").Preload("Responder").Where("responder_id = ? AND is_read = ?", userId, false).Find(&messages).Error; err != nil {
+		return nil, err
+	}
+	return &messages, nil
 }

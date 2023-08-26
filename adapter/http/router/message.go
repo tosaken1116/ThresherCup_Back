@@ -27,5 +27,6 @@ func InitMessageRouter(r *gin.RouterGroup) {
 		})
 		messageGroup.GET("/:id", func(c *gin.Context) { messageController.GetMessages(c) })
 		messageGroup.POST("/:id", func(c *gin.Context) { messageController.CreateNewMessage(c) })
+		messageGroup.GET("/unread", func(c *gin.Context) { messageController.GetUnreadMessages(c) })
 	}
 }

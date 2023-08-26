@@ -65,6 +65,24 @@ definitions:
       user_id:
         type: string
     type: object
+  model.UnreadMessage:
+    properties:
+      messages:
+        items:
+          $ref: '#/definitions/model.UnreadMessageOne'
+        type: array
+      user:
+        $ref: '#/definitions/thresher_usecase_model.Users'
+    type: object
+  model.UnreadMessageOne:
+    properties:
+      content:
+        type: string
+      created_at:
+        type: string
+      id:
+        type: string
+    type: object
   model.UpdateMyHome:
     properties:
       latitude:
@@ -489,6 +507,38 @@ paths:
       security:
       - Bearer: []
       summary: メッセージの作成
+      tags:
+      - message
+  /message/unread:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              items:
+                $ref: '#/definitions/model.UnreadMessage'
+              type: array
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errors.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/errors.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errors.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: 未読メッセージの取得
       tags:
       - message
   /posts:

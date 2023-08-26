@@ -13,6 +13,7 @@ import (
 type IMessagePresenter interface {
 	RenderMessage(Message model.Message)
 	RenderMessages(Message []model.Message)
+	RenderUnreadMessages(message map[string]model.UnreadMessage)
 	RenderError(err error)
 	RenderSuccess()
 }
@@ -45,4 +46,8 @@ func (mp *MessagePresenter) RenderError(err error) {
 }
 func (mp *MessagePresenter) RenderSuccess() {
 	mp.ctx.JSON(http.StatusOK, errors.SuccessResponse{StatusText: "ok"})
+}
+
+func (mp *MessagePresenter) RenderUnreadMessages(message map[string]model.UnreadMessage) {
+	mp.ctx.JSON(http.StatusOK, message)
 }
