@@ -358,7 +358,7 @@ paths:
             $ref: '#/definitions/errors.ErrorResponse'
       security:
       - Bearer: []
-      summary: 投稿の取得
+      summary: ユーザーの更新
       tags:
       - user
 securityDefinitions:

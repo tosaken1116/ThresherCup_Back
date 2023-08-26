@@ -24,7 +24,7 @@ func NewUserController(uu usecase.IUserUsecase) IUserController {
 	}
 }
 
-// @Summary 投稿の取得
+// @Summary ユーザーの更新
 // @Tags user
 // @Accept  json
 // @Produce  json

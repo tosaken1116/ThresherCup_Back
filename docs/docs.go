@@ -384,7 +384,7 @@ const docTemplate = `{
                 "tags": [
                     "user"
                 ],
-                "summary": "投稿の取得",
+                "summary": "ユーザーの更新",
                 "parameters": [
                     {
                         "description": "User",
