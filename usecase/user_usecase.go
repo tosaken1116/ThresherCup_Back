@@ -13,6 +13,7 @@ type IUserUsecase interface {
 	UpdateUser(ctx *gin.Context, input model.UpdateUser) error
 	GetFollowing(ctx *gin.Context) (*[]model.Users, error)
 	GetFollowed(ctx *gin.Context) (*[]model.Users, error)
+	CreateFollow(ctx *gin.Context, targetId string) error
 }
 
 type userUsecase struct {
@@ -38,25 +39,36 @@ func (uu *userUsecase) UpdateUser(ctx *gin.Context, input model.UpdateUser) erro
 }
 
 func (uu *userUsecase) GetFollowing(ctx *gin.Context) (*[]model.Users, error) {
-	userId ,gErr := ctx.Get("userId")
-	if !gErr{
-		return nil,errors.New(http.StatusInternalServerError, "cannot get user_id", "/usecase/user_usecase/GetFollowing")
+	userId, gErr := ctx.Get("userId")
+	if !gErr {
+		return nil, errors.New(http.StatusInternalServerError, "cannot get user_id", "/usecase/user_usecase/GetFollowing")
 	}
-	u,err := uu.svc.GetFollowing(ctx,userId.(string))
-	if err != nil{
-		return nil,err
+	u, err := uu.svc.GetFollowing(ctx, userId.(string))
+	if err != nil {
+		return nil, err
 	}
-	return model.UsersFromDomainModels(u),nil
+	return model.UsersFromDomainModels(u), nil
 }
 
-func (uu *userUsecase)GetFollowed(ctx *gin.Context) (*[]model.Users, error){
-	userId ,gErr := ctx.Get("userId")
-	if !gErr{
-		return nil,errors.New(http.StatusInternalServerError, "cannot get user_id", "/usecase/user_usecase/GetFollowed")
+func (uu *userUsecase) GetFollowed(ctx *gin.Context) (*[]model.Users, error) {
+	userId, gErr := ctx.Get("userId")
+	if !gErr {
+		return nil, errors.New(http.StatusInternalServerError, "cannot get user_id", "/usecase/user_usecase/GetFollowed")
 	}
-	u,err := uu.svc.GetFollowed(ctx,userId.(string))
-	if err != nil{
-		return nil,err
+	u, err := uu.svc.GetFollowed(ctx, userId.(string))
+	if err != nil {
+		return nil, err
 	}
-	return model.UsersFromDomainModels(u),nil
+	return model.UsersFromDomainModels(u), nil
+}
+func (uu *userUsecase) CreateFollow(ctx *gin.Context, targetId string) error {
+	userId, gErr := ctx.Get("userId")
+	if !gErr {
+		return errors.New(http.StatusInternalServerError, "cannot get user_id", "/usecase/user_usecase/CreateFollow")
+	}
+	err := uu.svc.CreateFollow(ctx, userId.(string), targetId)
+	if err != nil {
+		return err
+	}
+	return nil
 }

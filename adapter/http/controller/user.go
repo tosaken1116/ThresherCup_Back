@@ -14,6 +14,7 @@ type IUserController interface {
 	UpdateUser(ctx *gin.Context)
 	GetFollowing(ctx *gin.Context)
 	GetFollowed(ctx *gin.Context)
+	NewFollow(ctx *gin.Context)
 }
 
 type userController struct {
@@ -42,7 +43,7 @@ func (pc *userController) UpdateUser(ctx *gin.Context) {
 	input := model.UpdateUser{}
 
 	if err := ctx.ShouldBindJSON(&input); err != nil {
-		presenter.RenderError(errors.New(http.StatusBadRequest,"Invalid User param","/adapter/http/controller/user/UpdateUser"))
+		presenter.RenderError(errors.New(http.StatusBadRequest, "Invalid User param", "/adapter/http/controller/user/UpdateUser"))
 	}
 	err := pc.usc.UpdateUser(ctx, input)
 	if err != nil {
@@ -65,7 +66,7 @@ func (pc *userController) UpdateUser(ctx *gin.Context) {
 func (pc *userController) GetFollowing(ctx *gin.Context) {
 	presenter := presenter.NewUserPresenter(ctx)
 
-	u,err := pc.usc.GetFollowing(ctx)
+	u, err := pc.usc.GetFollowing(ctx)
 	if err != nil {
 		presenter.RenderError(err)
 		return
@@ -86,10 +87,33 @@ func (pc *userController) GetFollowing(ctx *gin.Context) {
 func (pc *userController) GetFollowed(ctx *gin.Context) {
 	presenter := presenter.NewUserPresenter(ctx)
 
-	u,err := pc.usc.GetFollowed(ctx)
+	u, err := pc.usc.GetFollowed(ctx)
 	if err != nil {
 		presenter.RenderError(err)
 		return
 	}
 	presenter.RenderUsers(u)
+}
+
+// @Summary 新規フォロー
+// @Tags user
+// @Accept  json
+// @Produce  json
+// @Security Bearer
+// @Param       id   path   string   true  "ID"
+// @Success 200 {object} errors.SuccessResponse
+// @Failure 400 {object} errors.ErrorResponse
+// @Failure 404 {object} errors.ErrorResponse
+// @Failure 500 {object} errors.ErrorResponse
+// @Router /users/follow/{id} [post]
+func (pc *userController) NewFollow(ctx *gin.Context) {
+	presenter := presenter.NewUserPresenter(ctx)
+	id := ctx.Param("id")
+
+	err := pc.usc.CreateFollow(ctx, id)
+	if err != nil {
+		presenter.RenderError(err)
+		return
+	}
+	presenter.RenderFollowSuccess()
 }

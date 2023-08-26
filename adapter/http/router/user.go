@@ -11,7 +11,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func InitUserRouter(r *gin.RouterGroup){
+func InitUserRouter(r *gin.RouterGroup) {
 	db := infra.NewPostgresConnector()
 	userRepository := repository.NewUserRepository(db.Conn)
 	userService := service.NewUserService(userRepository)
@@ -24,10 +24,11 @@ func InitUserRouter(r *gin.RouterGroup){
 				"status": "OK",
 			})
 		})
-		userGroup.PUT("",func(c *gin.Context){
+		userGroup.PUT("", func(c *gin.Context) {
 			userController.UpdateUser(c)
 		})
-		userGroup.GET("/following",func(c *gin.Context){userController.GetFollowing(c)})
-		userGroup.GET("/followed",func(c *gin.Context){userController.GetFollowed(c)})
+		userGroup.GET("/following", func(c *gin.Context) { userController.GetFollowing(c) })
+		userGroup.GET("/followed", func(c *gin.Context) { userController.GetFollowed(c) })
+		userGroup.POST("/follow/:id", func(c *gin.Context) { userController.NewFollow(c) })
 	}
 }

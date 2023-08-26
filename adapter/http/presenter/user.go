@@ -16,6 +16,7 @@ type IUserPresenter interface {
 	RenderError(err error)
 	RenderDeleteSuccess()
 	RenderUpdateSuccess()
+	RenderFollowSuccess()
 }
 type UserPresenter struct {
 	ctx *gin.Context
@@ -34,7 +35,6 @@ func (up *UserPresenter) RenderUsers(user *[]model.Users) {
 	up.ctx.JSON(http.StatusOK, user)
 }
 
-
 func (up *UserPresenter) RenderError(err error) {
 	if e, ok := err.(*errors.Error); ok {
 		log.Println(err.Error())
@@ -46,10 +46,13 @@ func (up *UserPresenter) RenderError(err error) {
 
 }
 
-func (up *UserPresenter)RenderDeleteSuccess(){
-	up.ctx.JSON(http.StatusOK,errors.SuccessResponse{StatusText: "ok"})
+func (up *UserPresenter) RenderDeleteSuccess() {
+	up.ctx.JSON(http.StatusOK, errors.SuccessResponse{StatusText: "ok"})
 }
 
-func (up *UserPresenter)RenderUpdateSuccess(){
-	up.ctx.JSON(http.StatusOK,errors.SuccessResponse{StatusText: "ok"})
+func (up *UserPresenter) RenderUpdateSuccess() {
+	up.ctx.JSON(http.StatusOK, errors.SuccessResponse{StatusText: "ok"})
+}
+func (up *UserPresenter) RenderFollowSuccess() {
+	up.ctx.JSON(http.StatusOK, errors.SuccessResponse{StatusText: "ok"})
 }
