@@ -76,6 +76,6 @@ type Encounter struct {
 	Longitude float32    `json:"longitude" gorm:"not null"`
 	Latitude  float32    `json:"latitude" gorm:"not null"`
 	CreatedAt time.Time `json:"created_at"`
-	PassingId uuid.UUID `json:"passing_id" gorm:"not null"`
-	PassedId  uuid.UUID `json:"passed_id" gorm:"not null"`
+	PassingId string `json:"passing_id" gorm:"not null"`
+	PassedId  string `json:"passed_id" gorm:"not null"`
 }
