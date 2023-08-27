@@ -121,6 +121,10 @@ definitions:
     type: object
   thresher_infra_model.Users:
     properties:
+      auto_responder:
+        items:
+          $ref: '#/definitions/thresher_infra_model.Users'
+        type: array
       blocking:
         items:
           $ref: '#/definitions/thresher_infra_model.Users'

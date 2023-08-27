@@ -1339,6 +1339,12 @@ const docTemplate = `{
         "thresher_infra_model.Users": {
             "type": "object",
             "properties": {
+                "auto_responder": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/thresher_infra_model.Users"
+                    }
+                },
                 "blocking": {
                     "type": "array",
                     "items": {

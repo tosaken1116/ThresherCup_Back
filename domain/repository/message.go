@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"thresher/infra/model"
 	"thresher/utils/errors"
+	"thresher/utils/openai"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -34,10 +35,10 @@ func (mr *messageRepository) GetMessages(ctx *gin.Context, senderId string, resp
 	return &messages, nil
 }
 func (mr *messageRepository) CreateMessage(ctx *gin.Context, senderId string, responderId string, content string) error {
-	isFollowing := mr.Db.Table("following").Where("following_id = ? AND followed_id = ?", senderId, responderId).RowsAffected
-	if isFollowing == 0 {
-		return errors.New(http.StatusForbidden, "You are not following this user", "/domain/repository/message.go/GetMessages")
-	}
+	// isFollowing := mr.Db.Table("following").Where("followed_id = ? AND following_id = ?", senderId, responderId).RowsAffected
+	// if isFollowing == 0 {
+	// 	return errors.New(http.StatusForbidden, "You are not following this user", "/domain/repository/message.go/GetMessages")
+	// }
 	m := &model.Message{
 		SenderID:    senderId,
 		ResponderID: responderId,
@@ -45,6 +46,31 @@ func (mr *messageRepository) CreateMessage(ctx *gin.Context, senderId string, re
 	}
 	if err := mr.Db.Create(&m).Error; err != nil {
 		return err
+	}
+	IsAutoResponse := mr.Db.Table("auto_response").Where("sender_id = ? AND responder_id = ?", responderId, senderId).Find(&model.Users{}).RowsAffected
+	if IsAutoResponse != 0 {
+		messages := []model.Message{}
+		if err := mr.Db.Table("messages").Preload("Sender").Preload("Responder").Where("sender_id = ? AND responder_id = ?", responderId, senderId).Or("sender_id = ? AND responder_id = ?", senderId, responderId).Order("created_at desc").Find(&messages).Error; err != nil {
+			return nil
+		}
+		fmt.Println(messages)
+		me := &model.Users{}
+		if err := mr.Db.Table("users").Where("id = ?", senderId).First(&me).Error; err != nil {
+			return nil
+		}
+		fmt.Println(me)
+		content, err := openai.GetOpenAiChat(ctx, messages, *me)
+		if err != nil {
+			return err
+		}
+		m := &model.Message{
+			SenderID:    responderId,
+			ResponderID: senderId,
+			Content:     *content,
+		}
+		if err := mr.Db.Create(&m).Error; err != nil {
+			return err
+		}
 	}
 	return nil
 }

@@ -8,15 +8,21 @@ import (
 )
 
 type AppCon struct {
-	Srv *srvCon
-	Db  *dbCon
-	Token *token
+	Srv    *srvCon
+	Db     *dbCon
+	Token  *token
+	OpenAi *openAi
 }
 type srvCon struct {
 	Port string
 }
-type token struct{
+type token struct {
 	JwtSecret string
+}
+type openAi struct {
+	Endpoint string
+	Secret   string
+	Model    string
 }
 
 type dbCon struct {
@@ -38,7 +44,9 @@ func LoadConfig() *AppCon {
 	dbPort := os.Getenv("POSTGRES_PORT")
 	srvPort := os.Getenv("PORT")
 	jwtSecret := os.Getenv("JWT_SECRET")
-
+	openaiEndpoint := os.Getenv("OPENAI_ENDPOINT")
+	openaiSecret := os.Getenv("OPENAI_SECRET")
+	openaiModel := os.Getenv("OPENAI_MODEL")
 	DbEnv := &dbCon{
 		DbHost: dbHost,
 		DbUser: dbUser,
@@ -52,10 +60,16 @@ func LoadConfig() *AppCon {
 	token := &token{
 		JwtSecret: jwtSecret,
 	}
+	openai := &openAi{
+		Endpoint: openaiEndpoint,
+		Secret:   openaiSecret,
+		Model:    openaiModel,
+	}
 	conf := AppCon{
-		Db:  DbEnv,
-		Srv: SrvEnv,
-		Token: token,
+		Db:     DbEnv,
+		Srv:    SrvEnv,
+		Token:  token,
+		OpenAi: openai,
 	}
 	return &conf
 }
