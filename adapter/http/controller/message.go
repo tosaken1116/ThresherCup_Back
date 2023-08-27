@@ -14,6 +14,7 @@ type IMessageController interface {
 	GetMessages(ctx *gin.Context)
 	CreateNewMessage(ctx *gin.Context)
 	GetUnreadMessages(ctx *gin.Context)
+	ChangeAutoResponse(ctx *gin.Context)
 }
 type messageController struct {
 	usc usecase.IMessageUsecase
@@ -95,4 +96,27 @@ func (mc *messageController) GetUnreadMessages(ctx *gin.Context) {
 		return
 	}
 	presenter.RenderUnreadMessages(*m)
+}
+
+// @Summary 自動返信の切り替え
+// @Tags message
+// @Accept  json
+// @Produce  json
+// @Security Bearer
+// @Param       id   path   string   true  "ID"
+// @Success 200 {object} errors.SuccessResponse
+// @Failure 400 {object} errors.ErrorResponse
+// @Failure 401 {object} errors.ErrorResponse
+// @Failure 403 {object} errors.ErrorResponse
+// @Failure 404 {object} errors.ErrorResponse
+// @Failure 500 {object} errors.ErrorResponse
+// @Router /message/auto_response/{id} [post]
+func (mc *messageController) ChangeAutoResponse(ctx *gin.Context) {
+	presenter := presenter.NewMessagePresenter(ctx)
+	err := mc.usc.ChangeAutoResponse(ctx, ctx.Param("id"))
+	if err != nil {
+		presenter.RenderError(err)
+		return
+	}
+	presenter.RenderSuccess()
 }

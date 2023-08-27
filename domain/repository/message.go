@@ -15,6 +15,7 @@ type IMessageRepository interface {
 	GetMessages(ctx *gin.Context, senderId string, responderId string) (*[]model.Message, error)
 	CreateMessage(ctx *gin.Context, senderId string, responderId string, content string) error
 	GetUnreadMessages(ctx *gin.Context, userId string) (*[]model.Message, error)
+	ChangeAutoResponse(ctx *gin.Context, senderId string, responderId string) error
 }
 
 type messageRepository struct {
@@ -81,4 +82,28 @@ func (mr *messageRepository) GetUnreadMessages(ctx *gin.Context, userId string) 
 		return nil, err
 	}
 	return &messages, nil
+}
+
+type AutoResponder struct {
+	SenderID    string
+	ResponderID string
+}
+
+func (mr *messageRepository) ChangeAutoResponse(ctx *gin.Context, senderId string, responderId string) error {
+	autoResponder := []AutoResponder{}
+	if IsAutoResponse := mr.Db.Raw("SELECT FROM auto_response WHERE sender_id = ? AND responder_id = ?", senderId, responderId).Scan(&autoResponder).RowsAffected; IsAutoResponse != 0 {
+		fmt.Println("===")
+		if err := mr.Db.Raw("DELETE FROM auto_response WHERE sender_id = ? AND responder_id = ?", senderId, responderId).Scan(&autoResponder).Error; err != nil {
+			return err
+		}
+		fmt.Println("=====")
+		fmt.Println(IsAutoResponse)
+		return nil
+	}
+	fmt.Println(autoResponder)
+	fmt.Println("=====================")
+	if err := mr.Db.Raw("INSERT INTO auto_response (sender_id, responder_id) VALUES (?, ?)", senderId, responderId).Scan(&autoResponder).Error; err != nil {
+		return err
+	}
+	return nil
 }

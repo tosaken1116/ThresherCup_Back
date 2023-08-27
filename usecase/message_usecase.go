@@ -13,6 +13,7 @@ type IMessageUsecase interface {
 	GetMessages(ctx *gin.Context, responderId string) (*[]model.Message, error)
 	CreateNewMessage(ctx *gin.Context, responderId string, input model.InputMessage) error
 	GetUnreadMessages(ctx *gin.Context) (*map[string]model.UnreadMessage, error)
+	ChangeAutoResponse(ctx *gin.Context, responderId string) error
 }
 
 type messageUsecase struct {
@@ -59,4 +60,13 @@ func (mu *messageUsecase) GetUnreadMessages(ctx *gin.Context) (*map[string]model
 		return nil, err
 	}
 	return model.UnreadMessageFromDomainModels(m), nil
+}
+
+func (m *messageUsecase) ChangeAutoResponse(ctx *gin.Context, responderId string) error {
+	senderId, gErr := ctx.Get("userId")
+	if !gErr {
+		return errors.New(http.StatusInternalServerError, "cannot get user_id", "/usecase/location_usecase/CreateNewLocation")
+	}
+
+	return m.svc.ChangeAutoResponse(ctx, senderId.(string), responderId)
 }

@@ -11,6 +11,7 @@ type IMessageService interface {
 	GetMessages(ctx *gin.Context, senderId string, responderId string) (*[]model.Message, error)
 	CreateMessage(ctx *gin.Context, senderId string, responderId string, content string) error
 	GetUnreadMessages(ctx *gin.Context, userId string) (*[]model.Message, error)
+	ChangeAutoResponse(ctx *gin.Context, senderId string, responderId string) error
 }
 
 type messageService struct {
@@ -31,4 +32,7 @@ func (ms *messageService) CreateMessage(ctx *gin.Context, senderId string, respo
 }
 func (ms *messageService) GetUnreadMessages(ctx *gin.Context, userId string) (*[]model.Message, error) {
 	return ms.repo.GetUnreadMessages(ctx, userId)
+}
+func (ms *messageService) ChangeAutoResponse(ctx *gin.Context, senderId string, responderId string) error {
+	return ms.repo.ChangeAutoResponse(ctx, senderId, responderId)
 }
